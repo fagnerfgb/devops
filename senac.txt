@@ -1,0 +1,3 @@
+Fagner Geraldes Braga - Utilizando o editor de texto VIM
+SENAC Tatuapé
+Utilizando os comandos básicos do VIM...
