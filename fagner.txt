@@ -1,2 +1,3 @@
 branch feature/fagner
 Resolvendo conflitos - usuario local
+Resolvendo conflitos - usuário remoto
