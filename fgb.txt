@@ -1,0 +1,263 @@
+    1  git config --list
+    2  git config --global user.name "Fagner Geraldes Braga"
+    3  git config --global user.email fagner.fgb@gmail.com
+    4  git config --global defaultBranch main
+    5  git config --global int.defaultBranch main
+    6  git config --list
+    7  man git
+    8  info git
+    9  git --help
+   10  git help git
+   11  git --config list
+   12  git config --list
+   13  cat ~/.gitconfig 
+   14  ls
+   15  pwd
+   16  mkdir repo
+   17  cd repo
+   18  git init
+   19  ls -lha
+   20  ls .git/
+   21  touch arquivo.txt
+   22  git status
+   23  git add arquivo.txt 
+   24  git status
+   25  git reset
+   26  git status
+   27  git add .
+   28  git status
+   29  git commit -m "Adicionando arquivo.txt"
+   30  git status
+   31  vim arquivo.txt 
+   32  git status
+   33  git add . && git commit -m "Alterando o arquivo.txt"
+   34  git status 
+   35  echo "Oi teste" >> arquivo.txt 
+   36  cat arquivo.txt 
+   37  git status 
+   38  git add . && git commit -m "Nova alteração no arquivo.txt"
+   39  git status
+   40  git log
+   41  git config --list
+   42  git config --global init.defaultbranch=main
+   43  git config --ist
+   44  git config --list
+   45  mkdir repo
+   46  cd repo/
+   47  git init
+   48  vim arquivo.txt
+   49  git status
+   50  git add .
+   51  git commit -m "Primeiro commit"
+   52  vim arquivo.txt 
+   53  git -a -m "Segundo commit"
+   54  git commit -a -m "Segundo commit"
+   55  git log
+   56  vim arquivo.txt 
+   57  git commit -am "Terceiro commit"
+   58  git log
+   59  git log -p arquivo.txt
+   60  ls
+   61  mkdir bin
+   62  touch dado.log
+   63  touch bin/main.exe
+   64  git status
+   65  vim .gitignore
+   66  git status
+   67  git commit -am "Adicionando o git ignore"
+   68  git status
+   69  git commit -am "Adicionando o gitignore"
+   70  git add .
+   71  git status
+   72  git commit -am "Adicionando o gitignore"
+   73  git status 
+   74  git config --list
+   75  git init
+   76  git config --list
+   77  git config --list
+   78  git config --global
+   79  cat ~/.gitconfig
+   80  git init
+   81  ls -lha
+   82  ls .git -lha
+   83  touch arquivo.txt
+   84  git status
+   85  git add arquivo.txt 
+   86  git status
+   87  git reset
+   88  git status
+   89  git add .
+   90  git status
+   91  git commit -m "primeiro commit"
+   92  git status
+   93  echo "Teste" >> arquivo.txt 
+   94  cat arquivo.txt 
+   95  git status
+   96  git add .
+   97  git commit -m "segundo commit"
+   98  git status
+   99  echo "Fagner" >> arquivo.txt 
+  100  cat arquivo.txt 
+  101  git status
+  102  git add .
+  103  git commit -m "terceiro commit"
+  104  git status
+  105  echo "Natalia" >> arquivo.txt 
+  106  git status
+  107  git commit -am "quarto commit"
+  108  git status
+  109  git log
+  110  git log -p arquivo.txt
+  111  git log
+  112  git checkout b9e37b6745e9258cad58ad5f27fb50a7d69a98f2
+  113  cat arquivo.txt 
+  114  git log
+  115  git checkout main
+  116  git log
+  117  git checkout 80d03dafd90bfd76bfede422e32896059d8c789d
+  118  cat arquivo.txt 
+  119  git checkout main
+  120  git reset --soft HEAD~1
+  121  git status
+  122  git reset --hard
+  123  cat arquivo.txt 
+  124  git log
+  125  mkdir bin
+  126  touch bin/teste.exe
+  127  echo "teste" >> dados.log
+  128  ls -ld *
+  129  ls bin/
+  130  vim .gitignore
+  131  git status
+  132  git commit -am "adicionando o .gitignore"
+  133  git add .
+  134  git commit -m "adicionando o .gitignore"
+  135  git status
+  136  git log
+  137  git log -p
+  138  ls
+  139  rm -rf bin/ dados.log 
+  140  ls -lh
+  141  git branch feature/novo_arquivo
+  142  git branch
+  143  git checkout feature/novo_arquivo 
+  144  git branch
+  145  echo "Corinthians" >> arquivo.txt 
+  146  git commit -am "primeiro commit na nova branch"
+  147  git branch
+  148  git checkout main 
+  149  cat arquivo.txt
+  150  git checkout feature/novo_arquivo 
+  151  cat arquivo.txt 
+  152  git branch 
+  153  git branch -m feature/fagner
+  154  git branch 
+  155  git checkout main 
+  156  git branch -d feature/fagner 
+  157  git branch -D feature/fagner 
+  158  git branch
+  159  git checkout -b feature/fagner
+  160  git branch 
+  161  echo "branch feature/fagner" >> fagner.txt
+  162  cat fagner.txt 
+  163  git commit -am "adicionando o arquivo fagner.txt"
+  164  git add .
+  165  git commit -m "adicionando o arquivo fagner.txt"
+  166  git log
+  167  git checkout main
+  168  echo "Natalia da Paz Almeida" >> arquivo.txt
+  169  cat arquivo.txt 
+  170  git checkout feature/fagner
+  171  cat arquivo.txt 
+  172  git checkout main
+  173  git -am "alterando arquivo.txt"
+  174  git commit -am "alterando arquivo.txt"
+  175  git checkout 
+  176  git checkout feature/fagner 
+  177  cat arquivo.txt 
+  178  git checkout main 
+  179  git merge feature/fagner 
+  180  git branch 
+  181  git branch -d feature/fagner 
+  182  git branch 
+  183  git log
+  184  git checkout -b feature/fagner_rebase
+  185  echo "Adicionando o arquivo rebase.txt" >> rebase.txt
+  186  git status
+  187  git add .
+  188  git commit -m "adicionando o arquivo rebase.txt"
+  189  cat rebase.txt 
+  190  git log
+  191  git checkout main
+  192  echo "Adicionando arquivo main.txt" >> main.txt
+  193  git add .
+  194  git -commit -m "adicionando o arquivo main.txt"
+  195  git commit -m "adicionando o arquivo main.txt"
+  196  git log
+  197  git checkout feature/fagner_rebase 
+  198  echo "Nova linha no arquivo rebase.txt" >> rebase.txt
+  199  cat rebase.txt 
+  200  git add .
+  201  git commit -m "adicionando nova linha no arquivo rebase.txt"
+  202  git checkout main
+  203  git rebase feature/fagner_rebase 
+  204  git log
+  205  git branch
+  206  git branch -d feature/fagner_rebase 
+  207  git checkout -b feature/fagner_cherry_pic
+  208  echo "Primeira linha" >> cherrypic.txt
+  209  cat cherrypic.txt 
+  210  git add .
+  211  git commit -m "adicionando arquivo cherrypic.txt"
+  212  git checkout main
+  213  git checkout -b hotfix
+  214  echo "Hotfix" >> hotfix.txt
+  215  cat hotfix.txt 
+  216  git add .
+  217  git commit -m "adicionando arquivo hotfix.txt"
+  218  git log
+  219  git checkout feature/fagner_cherry_pic
+  220  git cherry-pick bad9619ca8056998e8fa3af0670c2b56bd05a5f0
+  221  git log
+  222  git tag
+  223  git checkout main
+  224  git tag -a v2.0 -m "Versão 2.0"
+  225  git tag
+  226  git log
+  227  git tag -a v1.0 -m "Versão 1.0" 8311b997cf0c707f526a51191708d1c7be3696cc
+  228  git tag
+  229  git show v2.0 
+  230  git show v1.0 
+  231  git tag -d v2.0
+  232  git tag
+  233  git show v1.0 
+  234  ssh-keygen -t rsa -b 2048
+  235  cat id_rsa.pub 
+  236  git remote add origin git@github.com:fagnerfgb/devops.git
+  237  git branch -M master
+  238  git push -u origin master
+  239  ls
+  240  cd ..
+  241  ls
+  242  rm -rf *
+  243  git clone git@github.com:fagnerfgb/devops.git
+  244  ls
+  245  git checkout -b novabranch
+  246  git log
+  247  echo "Repositorio remoto" >> main.txt 
+  248  git add .
+  249  git commit -m "alteracao no arquivo main.txt (teste remoto)"
+  250  git log
+  251  git push
+  252  git push --set-upstream origin novabranch 
+  253  git log
+  254  git branch
+  255  git checkout master
+  256  cat main.txt 
+  257  ls
+  258  cat main.txt 
+  259  cat arquivo.txt 
+  260  git pull
+  261  cat arquivo.txt 
+  262  git merge novabranch 
+  263  history > fgb.txt
