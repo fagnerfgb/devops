@@ -4,3 +4,4 @@ Testando novamente
 Nova linha no arquivo main
 Verificando conflitos
 nova linha local fetch
+nova linha remoto
