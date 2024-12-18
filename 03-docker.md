@@ -1,7 +1,7 @@
 #Autor: Fagner Geraldes Braga  
 #Data de criação: 13/12/2024  
-#Data de atualização: 17/12/2024  
-#Versão: 0.03
+#Data de atualização: 18/12/2024  
+#Versão: 0.04
 
 ## namespace
 ```bash
@@ -216,6 +216,72 @@ docker container run -d -p 3306:3306 -e MYSQL_ROOT_PASSWORD="root1234" -e MYSQL_
 
 # remove todos os containers de uma vez de forma forçada
 docker container rm -f $(docker container ls -qa)
+```
+## Executando aplicação nodejs em servidor comum
+```docker
+sudo apt update
+sudo apt upgrade -y
+sudo apt install nodejs -y && sudo apt install npm -y
+node -v
+pwd
+git clone https://github.com/KubeDev/conversao-temperatura.git
+cd conversao-temperatura/src
+npm install
+npm audit fix
+npm install
+node server.js
+```
+
+## Executando a aplicação dentro de um container
+```docker
+# executa container com imagem ubuntu
+# em modo interativo com terminal bash
+# faz o bind da porta 8080 do servidor
+# para a porta 8080 do container
+ docker container run -it -p 8080:8080 ubuntu /bin/bash
+```
+### Instalando o nodejs no container
+```docker
+apt update
+apt-get install -y curl
+curl -fsSL https://deb.nodesource.com/setup_23.x -o nodesource_setup.sh
+bash nodesource_setup.sh
+apt-get install -y nodejs
+node -v
+```
+### Copiando diretorio da aplicação do servidor para o container
+```docker
+cd conversao-temperatura/src/
+docker container ls
+docker container cp . c9a4d8016c6c:/app
+```
+### Instalando e executando a aplicação no container
+```docker
+cd app
+npm install
+node server.js
+```
+## OverlayFS
+```docker
+cd /
+sudo mkdir -p /overlay/primeira_camada
+sudo mkdir -p /overlay/segunda_camada
+sudo mkdir -p /overlay/work
+sudo mkdir -p /overlay/merge
+sudo apt install tree -y
+tree /overlay/
+echo "Arquivo teste na primeira camada" | sudo tee /overlay/primeira_camada/01_camada.txt
+echo "Arquivo teste na segunda camada" | sudo tee /overlay/segunda_camada/02_camada.txt
+tree /overlay/
+sudo mount -t overlay -o lowerdir=/overlay/primeira_camada/,upperdir=/overlay/segunda_camada/,workdir=/overlay/work/ overlay /overlay/merge/
+tree overlay/
+echo "Arquivo merge" | sudo tee /overlay/merge/merge.txt
+tree overlay/
+```
+## Copy-on-Write
+```docker
+echo "Alteração no arquivo" | sudo tee /overlay/merge/01_camada.txt
+tree overlay/
 ```
 ```docker
 
