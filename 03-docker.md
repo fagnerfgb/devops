@@ -217,12 +217,6 @@ docker container run -d -p 3306:3306 -e MYSQL_ROOT_PASSWORD="root1234" -e MYSQL_
 # remove todos os containers de uma vez de forma forçada
 docker container rm -f $(docker container ls -qa)
 ```
-
-## Desafio 1
-```docker
-docker container run -d -p 5432:5432 -e POSTGRES_PASSWORD="docker_pwd" -e POSTGRES_USER=docker_usr -e POSTGRES_DB=curso_docker postgres
-```
-
 ```docker
 
 
