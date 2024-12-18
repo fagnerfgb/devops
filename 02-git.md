@@ -201,7 +201,7 @@ git push
 cat main.txt
 ```
 ```git
- git log
+git log
 git log arquivo.txt
 git log --oneline
 git log --stats
