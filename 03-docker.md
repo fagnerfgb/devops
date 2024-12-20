@@ -1,7 +1,7 @@
 #Autor: Fagner Geraldes Braga  
 #Data de criação: 13/12/2024  
-#Data de atualização: 18/12/2024  
-#Versão: 0.04
+#Data de atualização: 19/12/2024  
+#Versão: 0.05
 
 ## namespace
 ```bash
@@ -232,7 +232,7 @@ npm install
 node server.js
 ```
 
-## Executando a aplicação dentro de um container
+### Executando a aplicação dentro de um container
 ```docker
 # executa container com imagem ubuntu
 # em modo interativo com terminal bash
@@ -257,7 +257,7 @@ docker container cp . c9a4d8016c6c:/app
 ```
 ### Instalando e executando a aplicação no container
 ```docker
-cd app
+cd /app
 npm install
 node server.js
 ```
@@ -283,6 +283,58 @@ tree overlay/
 echo "Alteração no arquivo" | sudo tee /overlay/merge/01_camada.txt
 tree overlay/
 ```
+## Docker Commit
+### Executando a aplicação dentro de um container
+```docker
+# executa container com imagem ubuntu
+# em modo interativo com terminal bash
+# faz o bind da porta 8080 do servidor
+# para a porta 8080 do container
+ docker container run -it -p 8080:8080 ubuntu /bin/bash
+```
+### Instalando o nodejs no container
+```docker
+apt update
+apt-get install -y curl
+curl -fsSL https://deb.nodesource.com/setup_23.x -o nodesource_setup.sh
+bash nodesource_setup.sh
+apt-get install -y nodejs
+node -v
+```
+### Copiando diretorio da aplicação do servidor para o container
+```docker
+cd conversao-temperatura/src/
+docker container ls
+docker container cp . a3cd2c7bc655:/app
+```
+### Instalando e executando a aplicação no container
+```docker
+cd /app
+npm install
+node server.js
+```
+### Criando o commit
+```docker
+docker container commit a3cd2c7bc655 conversao-temperatura
+docker container rm -f $(docker container ls -qa)
+```
+### Executando a imagem criada
+```docker
+# Forma 1
+docker container run -it -p 8080:8080 conversao-temperatura /bin/bash
+
+# Forma 2
+docker container run -d -p 8080:8080 conversao-temperatura node /app/server.js
+docker container ls
+```
+### Entendendo melhor a imagem
+```docker
+docker image history ubuntu
+docker image history conversao-temperatura
+docker image inspect conversao-temperatura
+docker image inspect conversao-temperatura > imagem.json
+```
+
 ```docker
 
 
