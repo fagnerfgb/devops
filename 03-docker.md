@@ -1,7 +1,7 @@
 #Autor: Fagner Geraldes Braga  
 #Data de criação: 13/12/2024  
-#Data de atualização: 19/12/2024  
-#Versão: 0.05
+#Data de atualização: 20/12/2024  
+#Versão: 0.06
 
 ## namespace
 ```bash
@@ -335,7 +335,180 @@ docker image inspect conversao-temperatura
 docker image inspect conversao-temperatura > imagem.json
 ```
 
+### Criando container e instalando curl
 ```docker
+docker container run -it ubuntu /bin/bash
+apt update
+apt install curl -y
+exit
+```
 
+### Criando Dockerfile
+```docker
+FROM ubuntu
+RUN apt update
+RUN apt install curl -y
+```
+
+### Criando imagem a partir do Dockerfile e executando o container com a nova imagem
+```docker
+docker build -t ubuntu-curl -f Dockerfile .
+docker image ls
+docker container run -it ubuntu-curl /bin/bash
+exit
+docker container rm -f $(docker container ls -qa)
+```
+
+### Criando imagem a partir do Dockerfile sem usar o cache
+```docker
+docker build -t ubuntu-curl -f Dockerfile . --no-cache
+```
+
+### Adicionando vim ao Dockerfile
+```docker
+FROM ubuntu
+RUN apt update
+RUN apt install curl -y
+RUN apt install vim -y
+```
+### Workdir
+```docker
+FROM ubuntu
+RUN apt update && apt install curl -y
+WORKDIR /app
+```
+
+```docker
+docker build -t ubuntu-curl -f Dockerfile .
+docker container run -it ubuntu-curl /bin/bash
+exit
+docker container rm -f $(docker container ls -qa)
+```
+
+### Copy
+```docker
+echo "Arquivo" > arquivo.txt
+```
+
+```docker
+FROM ubuntu
+RUN apt update && apt install curl -y
+WORKDIR /app
+COPY arquivo.txt .
+```
+
+```docker
+docker build -t ubuntu-curl -f Dockerfile .
+docker container run -it ubuntu-curl /bin/bash
+exit
+docker container rm -f $(docker container ls -qa)
+```
+
+### Add
+```docker
+FROM ubuntu
+RUN apt update && apt install curl -y
+WORKDIR /app
+ADD https://www.google.com pagina.html
+```
+
+```docker
+docker build -t ubuntu-curl -f Dockerfile .
+docker container run -it ubuntu-curl /bin/bash
+exit
+docker container rm -f $(docker container ls -qa)
+```
+
+```docker
+mv arquivo.txt ./arquivo
+echo "Teste" > ./arquivo/teste.txt
+tar -zvcf teste.tar.gz arquivo/
+```
+```docker
+FROM ubuntu
+RUN apt update && apt install curl -y
+WORKDIR /app
+ADD teste.tar.gz ./
+```
+
+```docker
+docker build -t ubuntu-curl -f Dockerfile .
+docker container run -it ubuntu-curl /bin/bash
+exit
+docker container rm -f $(docker container ls -qa)
+```
+
+### Label
+```docker
+FROM ubuntu
+RUN apt update && apt install curl -y
+LABEL contato="fagner.fgb@gmail.com"
+WORKDIR /app
+```
+```docker
+docker build -t ubuntu-curl -f Dockerfile .
+docker image inspect ubuntu-curl
+docker container run -it ubuntu-curl /bin/bash
+exit
+docker container rm -f $(docker container ls -qa)
+```
+
+### ENV
+```docker
+FROM ubuntu
+RUN apt update && apt install curl -y
+LABEL contato="fagner.fgb@gmail.com"
+WORKDIR /app
+ENV VALOR_DOCKER_ENV="Valo XPTO"
+```
+```docker
+docker build -t ubuntu-curl -f Dockerfile .
+docker container run -it ubuntu-curl /bin/bash
+exit
+docker container rm -f $(docker container ls -qa)
+```
+### Volume
+```docker
+FROM ubuntu
+RUN apt update && apt install curl -y
+LABEL contato="fagner.fgb@gmail.com"
+VOLUME /app
+```
+```docker
+docker build -t ubuntu-curl -f Dockerfile .
+docker image inspect ubuntu-curl | grep -A 2 Volumes
+```
+### ARG
+```docker
+FROM ubuntu
+RUN apt update && apt install curl -y
+WORKDIR /app
+ARG VAR_TEXTO="Texto XPTO"
+RUN echo $VAR_TEXTO > arquivo.txt
+```
+```docker
+docker build -t ubuntu-curl --build-arg VAR_TEXTO="Fagner Geraldes Braga" -f Dockerfile .
+docker container run -it ubuntu-curl /bin/bash
+exit
+docker container rm -f $(docker container ls -qa)
+```
+### EXPOSE
+```docker
+FROM ubuntu
+EXPOSE 80
+RUN apt update && apt install nginx -y
+WORKDIR /app
+```
+```docker
+docker build -t ubuntu-nginx -f Dockerfile .
+# -P pega uma porta disponível de forma aleatória
+docker container run -it -P ubuntu-nginx /bin/bash
+/usr/sbin/nginx -g "daemon off;"
+exit
+docker container rm -f $(docker container ls -qa)
+```
+
+
+```docker
 
 ```
