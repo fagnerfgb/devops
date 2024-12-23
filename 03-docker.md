@@ -1,7 +1,7 @@
 #Autor: Fagner Geraldes Braga  
 #Data de criação: 13/12/2024  
-#Data de atualização: 20/12/2024  
-#Versão: 0.06
+#Data de atualização: 23/12/2024  
+#Versão: 0.07
 
 ## namespace
 ```bash
@@ -507,6 +507,124 @@ docker container run -it -P ubuntu-nginx /bin/bash
 exit
 docker container rm -f $(docker container ls -qa)
 ```
+### User
+```docker
+FROM ubuntu
+RUN useradd fagner
+RUN apt update && apt install curl -y
+WORKDIR /app
+COPY --chown=fagner:fagner --chmod=777 ./aula/teste.txt .
+USER fagner
+```
+```docker
+docker build -t ubuntu-curl -f Dockerfile .
+docker container run -it ubuntu-curl /bin/bash
+exit
+docker container rm -f $(docker container ls -qa)
+```
+### ENTRYPOINT
+```docker
+FROM ubuntu
+RUN apt update && apt install curl -y
+ENTRYPOINT [ "echo", "Hello World !" ]
+```
+```docker
+docker build -t ubuntu-curl -f Dockerfile .
+docker container run ubuntu-curl 
+docker container rm -f $(docker container ls -qa)
+```
+
+```docker
+FROM ubuntu
+RUN apt update && apt install curl -y
+ENTRYPOINT [ "echo", "Hello World !" ]
+CMD [ "Combinado com o entrypoint" ]
+```
+```docker
+docker build -t ubuntu-curl -f Dockerfile .
+docker container run ubuntu-curl 
+docker container run ubuntu-curl teste
+docker container rm -f $(docker container ls -qa)
+```
+### entrypoint.sh
+```bash
+if [ -z $1 ]
+then
+    echo "Iniciando o container sem parametro"
+else
+    echo "Iniciando o container com o parametro $1"
+fi
+```
+```docker
+FROM ubuntu
+RUN apt update && apt install curl -y
+WORKDIR /app
+COPY --chown=root:root --chmod=100 ./entrypoint.sh .
+ENTRYPOINT [ "./entrypoint.sh" ]
+```
+```docker
+docker build -t ubuntu-curl -f Dockerfile .
+docker container run ubuntu-curl 
+docker container run ubuntu-curl teste
+docker container rm -f $(docker container ls -qa)
+```
+
+```docker
+FROM ubuntu
+RUN apt update && apt install curl -y
+WORKDIR /app
+COPY --chown=root:root --chmod=100 ./entrypoint.sh .
+ENTRYPOINT [ "./entrypoint.sh" ]
+CMD [ "XPTO" ]
+```
+
+```docker
+docker build -t ubuntu-curl -f Dockerfile .
+docker container run ubuntu-curl 
+docker container run ubuntu-curl teste
+docker container rm -f $(docker container ls -qa)
+```
+
+### Principais comandos com imagem
+```docker
+docker commit
+docker build
+docker image ls
+docker image rm
+docker container rm -f $(docker container ls -qa)
+docker image rm -f $(docker image ls -qa)
+docker image prune
+```
+
+### Imagem da aplicação com Dockerfile
+```docker
+FROM ubuntu
+RUN apt update && \
+    apt-get install -y curl && \
+    curl -fsSL https://deb.nodesource.com/setup_23.x -o nodesource_setup.sh && \
+    bash nodesource_setup.sh && \
+    apt-get install -y nodejs
+WORKDIR /app
+COPY . .
+RUN npm install
+ENTRYPOINT [ "node", "server.js" ]
+```
+```docker
+mkdir ~/aula/
+cd ~/aula/
+git clone https://github.com/KubeDev/conversao-temperatura.git
+cd ~/aula/conversao-temperatura/src/
+docker build -t conversao-temperatura -f Dockerfile .
+docker image ls
+docker container run -d -p 8080:8080 conversao-temperatura
+docker container ls
+docker container rm -f $(docker container ls -qa)
+docker image rm -f $(docker image ls -qa)
+docker image prune
+```
+
+
+
 
 
 ```docker
