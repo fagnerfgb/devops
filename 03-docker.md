@@ -371,7 +371,7 @@ RUN apt update
 RUN apt install curl -y
 RUN apt install vim -y
 ```
-### Workdir
+### WORKDIR
 ```docker
 FROM ubuntu
 RUN apt update && apt install curl -y
@@ -385,7 +385,7 @@ exit
 docker container rm -f $(docker container ls -qa)
 ```
 
-### Copy
+### COPY
 ```docker
 echo "Arquivo" > arquivo.txt
 ```
@@ -404,7 +404,7 @@ exit
 docker container rm -f $(docker container ls -qa)
 ```
 
-### Add
+### ADD
 ```docker
 FROM ubuntu
 RUN apt update && apt install curl -y
@@ -438,7 +438,7 @@ exit
 docker container rm -f $(docker container ls -qa)
 ```
 
-### Label
+### LABEL
 ```docker
 FROM ubuntu
 RUN apt update && apt install curl -y
@@ -467,7 +467,7 @@ docker container run -it ubuntu-curl /bin/bash
 exit
 docker container rm -f $(docker container ls -qa)
 ```
-### Volume
+### VOLUME
 ```docker
 FROM ubuntu
 RUN apt update && apt install curl -y
@@ -507,7 +507,7 @@ docker container run -it -P ubuntu-nginx /bin/bash
 exit
 docker container rm -f $(docker container ls -qa)
 ```
-### User
+### USER
 ```docker
 FROM ubuntu
 RUN useradd fagner
@@ -585,7 +585,7 @@ docker container run ubuntu-curl teste
 docker container rm -f $(docker container ls -qa)
 ```
 
-### Principais comandos com imagem
+### PRINCIPAIS COMANDOS COM IMAGENS
 ```docker
 docker commit
 docker build
@@ -596,7 +596,7 @@ docker image rm -f $(docker image ls -qa)
 docker image prune
 ```
 
-### Imagem da aplicação com Dockerfile
+### IMAGEM DA APLICAÇÃO COM DOCKERFILE
 ```docker
 FROM ubuntu
 RUN apt update && \
@@ -622,11 +622,6 @@ docker container rm -f $(docker container ls -qa)
 docker image rm -f $(docker image ls -qa)
 docker image prune
 ```
-
-
-
-
-
 ```docker
 
 ```
