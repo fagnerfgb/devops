@@ -671,7 +671,5 @@ docker build -t fagnerfgb/conversao-temperatura:v2 -f Dockerfile .
 docker tag fagnerfgb/conversao-temperatura:v2 fagnerfgb/conversao-temperatura:latest
 docker container run -d -p 8080:8080 fagnerfgb/conversao-temperatura:v2
 docker container rm -f $(docker container ls -qa)
-
-
 ```
 
