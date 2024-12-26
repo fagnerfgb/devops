@@ -1,6 +1,6 @@
-FROM ubuntu
-RUN apt update && apt install curl -y
+FROM node:23.5.0-alpine3.20
 WORKDIR /app
-COPY --chown=root:root --chmod=100 ./entrypoint.sh .
-ENTRYPOINT [ "./entrypoint.sh" ]
-CMD [ "XPTO" ]
+COPY package*.json .
+RUN npm install
+COPY . .
+ENTRYPOINT [ "node", "server.js" ]

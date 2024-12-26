@@ -1,7 +1,7 @@
 #Autor: Fagner Geraldes Braga  
 #Data de criação: 13/12/2024  
-#Data de atualização: 23/12/2024  
-#Versão: 0.07
+#Data de atualização: 26/12/2024  
+#Versão: 0.08
 
 ## namespace
 ```bash
@@ -622,6 +622,56 @@ docker container rm -f $(docker container ls -qa)
 docker image rm -f $(docker image ls -qa)
 docker image prune
 ```
+## Docker Registry
+
+### Alterando nome da imagem para ficar com nomenclatura correta
 ```docker
+docker tag conversao-temperatura fagnerfgb/conversao-temperatura:v1
+docker image ls
+docker image rm -f $(docker image ls -qa)
+docker image prune
+```
+
+### Criando imagem com a nomenclatura correta para envio ao DockerHub
+```docker
+cd ~/aula/conversao-temperatura/src/
+# namespace/repositorio:tag
+docker build -t fagnerfgb/conversao-temperatura:v1 -f Dockerfile .
+docker tag fagnerfgb/conversao-temperatura:v1 fagnerfgb/conversao-temperatura:latest
+```
+### Enviar imagem ao DockerHub
+```docker
+docker login
+docker push fagnerfgb/conversao-temperatura:v1
+docker push fagnerfgb/conversao-temperatura:latest
+docker image rm -f $(docker image ls -qa)
+docker image prune
+docker pull fagnerfgb/conversao-temperatura
+```
+
+### Boas práticas para construção de imagens
+Um processo por container  
+Usar imagens confiáveis  
+Usar imagens tagueadas  
+Linux Alpine é bem leve  
+Uso inteligente das camadas
+Dockerignore
+
+### Alteração do Dockerfile
+```docker
+FROM node:23.5.0-alpine3.20
+WORKDIR /app
+COPY . .
+RUN npm install
+ENTRYPOINT [ "node", "server.js" ]
+```
+
+```docker
+docker build -t fagnerfgb/conversao-temperatura:v2 -f Dockerfile .
+docker tag fagnerfgb/conversao-temperatura:v2 fagnerfgb/conversao-temperatura:latest
+docker container run -d -p 8080:8080 fagnerfgb/conversao-temperatura:v2
+docker container rm -f $(docker container ls -qa)
+
 
 ```
+
