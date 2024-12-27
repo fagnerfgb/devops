@@ -94,7 +94,12 @@ docker container ls -a
 docker logs a5ac6afa429e
 
 # execução do container mysql com os dados para acesso ao mysql
-docker container run -d -p 3306:3306 -e MYSQL_ROOT_PASSWORD="root1234" -e MYSQL_DATABASE=auladocker -e MYSQL_USER=userdocker -e MYSQL_PASSWORD=auladockerpwd mysql
+docker container run -d -p 3306:3306 \
+-e MYSQL_ROOT_PASSWORD="root1234" \
+-e MYSQL_DATABASE=auladocker \
+-e MYSQL_USER=userdocker \
+-e MYSQL_PASSWORD=auladockerpwd \
+mysql
 
 # remove todos os containers de uma vez de forma forçada
 docker container rm -f $(docker container ls -qa)
