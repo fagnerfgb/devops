@@ -1,0 +1,4 @@
+FROM ubuntu
+RUN apt update && apt install curl -y
+LABEL contato="fagner.fgb@gmail.com"
+WORKDIR /app

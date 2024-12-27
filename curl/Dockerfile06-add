@@ -1,0 +1,4 @@
+FROM ubuntu
+RUN apt update && apt install curl -y
+WORKDIR /app
+ADD teste.tar.gz ./

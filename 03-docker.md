@@ -343,7 +343,7 @@ apt install curl -y
 exit
 ```
 
-### Criando Dockerfile
+### Criando Dockerfile01
 ```docker
 FROM ubuntu
 RUN apt update
@@ -352,44 +352,58 @@ RUN apt install curl -y
 
 ### Criando imagem a partir do Dockerfile e executando o container com a nova imagem
 ```docker
-docker build -t ubuntu-curl -f Dockerfile .
+cd ~/devops/curl/
+docker build -t ubuntu-curl -f Dockerfile01 .
 docker image ls
 docker container run -it ubuntu-curl /bin/bash
 exit
 docker container rm -f $(docker container ls -qa)
+docker image rm -f $(docker image ls -qa)
+docker image prune
 ```
 
 ### Criando imagem a partir do Dockerfile sem usar o cache
 ```docker
-docker build -t ubuntu-curl -f Dockerfile . --no-cache
+docker build -t ubuntu-curl -f Dockerfile01 . --no-cache
 ```
 
 ### Adicionando vim ao Dockerfile
+### Dockerfile02-vim
 ```docker
 FROM ubuntu
 RUN apt update
 RUN apt install curl -y
 RUN apt install vim -y
 ```
+```docker
+docker build -t ubuntu-curl -f Dockerfile02-vim .
+docker container run -it ubuntu-curl /bin/bash
+exit
+docker container rm -f $(docker container ls -qa)
+docker image rm -f $(docker image ls -qa)
+docker image prune
+```
 ### WORKDIR
+### Dockerfile03-workdir
 ```docker
 FROM ubuntu
 RUN apt update && apt install curl -y
 WORKDIR /app
 ```
-
 ```docker
-docker build -t ubuntu-curl -f Dockerfile .
+docker build -t ubuntu-curl -f Dockerfile03-workdir .
 docker container run -it ubuntu-curl /bin/bash
 exit
 docker container rm -f $(docker container ls -qa)
+docker image rm -f $(docker image ls -qa)
+docker image prune
 ```
 
 ### COPY
 ```docker
 echo "Arquivo" > arquivo.txt
 ```
-
+### Dockerfile04-copy
 ```docker
 FROM ubuntu
 RUN apt update && apt install curl -y
@@ -398,13 +412,16 @@ COPY arquivo.txt .
 ```
 
 ```docker
-docker build -t ubuntu-curl -f Dockerfile .
+docker build -t ubuntu-curl -f Dockerfile04-copy .
 docker container run -it ubuntu-curl /bin/bash
 exit
 docker container rm -f $(docker container ls -qa)
+docker image rm -f $(docker image ls -qa)
+docker image prune
 ```
 
 ### ADD
+### Dockerfile05-add
 ```docker
 FROM ubuntu
 RUN apt update && apt install curl -y
@@ -413,17 +430,21 @@ ADD https://www.google.com pagina.html
 ```
 
 ```docker
-docker build -t ubuntu-curl -f Dockerfile .
+docker build -t ubuntu-curl -f Dockerfile05-add .
 docker container run -it ubuntu-curl /bin/bash
 exit
 docker container rm -f $(docker container ls -qa)
+docker image rm -f $(docker image ls -qa)
+docker image prune
 ```
 
 ```docker
-mv arquivo.txt ./arquivo
-echo "Teste" > ./arquivo/teste.txt
-tar -zvcf teste.tar.gz arquivo/
+mkdir -p ~/devops/curl/teste
+echo "Teste" > ~/devops/curl/teste/teste.txt
+tar -zvcf teste.tar.gz teste/
+rm -rf teste/
 ```
+### Dockerfile06-add
 ```docker
 FROM ubuntu
 RUN apt update && apt install curl -y
@@ -432,13 +453,16 @@ ADD teste.tar.gz ./
 ```
 
 ```docker
-docker build -t ubuntu-curl -f Dockerfile .
+docker build -t ubuntu-curl -f Dockerfile06-add .
 docker container run -it ubuntu-curl /bin/bash
 exit
 docker container rm -f $(docker container ls -qa)
+docker image rm -f $(docker image ls -qa)
+docker image prune
 ```
 
 ### LABEL
+### Dockerfile07-label
 ```docker
 FROM ubuntu
 RUN apt update && apt install curl -y
@@ -446,26 +470,31 @@ LABEL contato="fagner.fgb@gmail.com"
 WORKDIR /app
 ```
 ```docker
-docker build -t ubuntu-curl -f Dockerfile .
+docker build -t ubuntu-curl -f Dockerfile07-label .
 docker image inspect ubuntu-curl
 docker container run -it ubuntu-curl /bin/bash
 exit
 docker container rm -f $(docker container ls -qa)
+docker image rm -f $(docker image ls -qa)
+docker image prune
 ```
 
 ### ENV
+### Dockerfile08-env
 ```docker
 FROM ubuntu
 RUN apt update && apt install curl -y
 LABEL contato="fagner.fgb@gmail.com"
 WORKDIR /app
-ENV VALOR_DOCKER_ENV="Valo XPTO"
+ENV VALOR_DOCKER_ENV="Valor XPTO"
 ```
 ```docker
-docker build -t ubuntu-curl -f Dockerfile .
+docker build -t ubuntu-curl -f Dockerfile08-env .
 docker container run -it ubuntu-curl /bin/bash
 exit
 docker container rm -f $(docker container ls -qa)
+docker image rm -f $(docker image ls -qa)
+docker image prune
 ```
 ### VOLUME
 ```docker
@@ -597,6 +626,7 @@ docker image prune
 ```
 
 ### IMAGEM DA APLICAÇÃO COM DOCKERFILE
+### Dockerfile01
 ```docker
 FROM ubuntu
 RUN apt update && \
@@ -610,11 +640,8 @@ RUN npm install
 ENTRYPOINT [ "node", "server.js" ]
 ```
 ```docker
-mkdir ~/aula/
-cd ~/aula/
-git clone https://github.com/KubeDev/conversao-temperatura.git
-cd ~/aula/conversao-temperatura/src/
-docker build -t conversao-temperatura -f Dockerfile .
+cd ~/devops/temperatura/src/
+docker build -t conversao-temperatura -f Dockerfile01 .
 docker image ls
 docker container run -d -p 8080:8080 conversao-temperatura
 docker container ls
@@ -634,9 +661,9 @@ docker image prune
 
 ### Criando imagem com a nomenclatura correta para envio ao DockerHub
 ```docker
-cd ~/aula/conversao-temperatura/src/
+cd ~/devops/temperatura/src/
 # namespace/repositorio:tag
-docker build -t fagnerfgb/conversao-temperatura:v1 -f Dockerfile .
+docker build -t fagnerfgb/conversao-temperatura:v1 -f Dockerfile01 .
 docker tag fagnerfgb/conversao-temperatura:v1 fagnerfgb/conversao-temperatura:latest
 ```
 ### Enviar imagem ao DockerHub
@@ -658,6 +685,7 @@ Uso inteligente das camadas
 Dockerignore
 
 ### Alteração do Dockerfile
+### Dockerfile-alpine01
 ```docker
 FROM node:23.5.0-alpine3.20
 WORKDIR /app
@@ -666,11 +694,51 @@ RUN npm install
 COPY . .
 ENTRYPOINT [ "node", "server.js" ]
 ```
-
 ```docker
-docker build -t fagnerfgb/conversao-temperatura:v2 -f Dockerfile .
+docker build -t fagnerfgb/conversao-temperatura:v2 -f Dockerfile-alpine01 .
 docker tag fagnerfgb/conversao-temperatura:v2 fagnerfgb/conversao-temperatura:latest
 docker container run -d -p 8080:8080 fagnerfgb/conversao-temperatura:v2
 docker container rm -f $(docker container ls -qa)
+docker image rm -f $(docker image ls -qa)
+docker image prune
+```
+## Multistage build
+### Criando imagem simples do GoLang com a nossa aplicação
+
+### Dockerfile.simples
+```docker
+FROM golang:1.23.4-alpine3.21
+WORKDIR /app
+COPY . .
+RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o main .
+CMD [ "./main" ]
+```
+```docker
+git pull
+cd devops/app
+docker build -t fagnerfgb/app-multi-staging:simples -f Dockerfile.simples .
+docker run -d -p 8080:8080 fagnerfgb/app-multi-staging:simples 
+docker container rm -f $(docker container ls -qa)
+docker image rm -f $(docker image ls -qa)
+docker image prune
+```
+### Dockerfile.multistage
+```docker
+FROM golang:1.23.4-alpine3.21 as build
+WORKDIR /build
+COPY . .
+RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o main .
+
+FROM alpine:3.21.0 as app
+WORKDIR /app
+COPY --from=build /build/main .
+CMD [ "./main" ]
 ```
 
+```docker
+docker build -t fagnerfgb/app-multistaging:multi -f Dockerfile.multistage .
+docker container run -d -p 8080:8080 fagnerfgb/app-multistaging:multi
+docker container rm -f $(docker container ls -qa)
+docker image rm -f $(docker image ls -qa)
+docker image prune
+```
