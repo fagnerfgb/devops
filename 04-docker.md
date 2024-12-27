@@ -160,7 +160,8 @@ tree /overlay/
 echo "Arquivo teste na primeira camada" | sudo tee /overlay/primeira_camada/01_camada.txt
 echo "Arquivo teste na segunda camada" | sudo tee /overlay/segunda_camada/02_camada.txt
 tree /overlay/
-sudo mount -t overlay -o lowerdir=/overlay/primeira_camada/,upperdir=/overlay/segunda_camada/,workdir=/overlay/work/ overlay /overlay/merge/
+sudo mount -t overlay -o lowerdir=/overlay/primeira_camada/,upperdir=/overlay/segunda_camada/,workdir=/overlay/work/ \
+overlay /overlay/merge/
 tree overlay/
 echo "Arquivo merge" | sudo tee /overlay/merge/merge.txt
 tree overlay/
