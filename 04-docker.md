@@ -548,3 +548,52 @@ docker container rm -f $(docker container ls -qa)
 docker image rm -f $(docker image ls -qa)
 docker image prune
 ```
+
+### Construindo a imagem intermediária "build"
+### Dockerfile.multistage
+[Dockerfile.multistage](golang/Dockerfile.multistage)
+
+```docker
+docker build -t fagnerfgb/app-multistaging:multi -f Dockerfile.multistage --target=build .
+docker container run -d -p 8080:8080 fagnerfgb/app-multistaging:multi
+docker container rm -f $(docker container ls -qa)
+docker image rm -f $(docker image ls -qa)
+docker image prune
+```
+
+### Copiar arquivos de outras imagens
+### Dockerfile.pacote-bin
+[Dockerfile.pacote-bin](golang/Dockerfile.pacote-bin)
+
+```docker
+docker container run -it fabricioveronez/pacote-bin:v1 /bin/sh
+ls
+exit
+```
+```docker
+docker build -t fagnerfgb/app-multistaging-copia:multistaging -f Dockerfile.pacote-bin .
+docker container run -d -p 8080:8080 fagnerfgb/app-multistaging-copia:multistaging
+docker container ls
+docker container exec -it 4156db95e96f /bin/sh
+ls
+exit
+docker container rm -f $(docker container ls -qa)
+docker image rm -f $(docker image ls -qa)
+docker image prune
+```
+
+### Usando imagem intermediária como base para outra imagem
+### Dockerfile.intermediaria
+[Dockerfile.intermediaria](golang/Dockerfile.intermediaria)
+
+```docker
+docker build -t fagnerfgb/app-multistaging-intermediaria:intermediaria -f Dockerfile.intermediaria .
+docker container run -d -p 8080:8080 fagnerfgb/app-multistaging-intermediaria:intermediaria
+docker container ls
+docker container exec -it c8ab0638f446 /bin/sh
+ls
+exit
+docker container rm -f $(docker container ls -qa)
+docker image rm -f $(docker image ls -qa)
+docker image prune
+```
