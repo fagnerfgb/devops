@@ -1,0 +1,6 @@
+FROM ubuntu
+RUN useradd fagner
+RUN apt update && apt install curl -y
+WORKDIR /app
+COPY --chown=fagner:fagner --chmod=777 ./arquivo.txt .
+USER fagner

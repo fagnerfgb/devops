@@ -1,127 +1,9 @@
 #Autor: Fagner Geraldes Braga  
 #Data de criação: 13/12/2024  
-#Data de atualização: 26/12/2024  
-#Versão: 0.08
+#Data de atualização: 27/12/2024  
+#Versão: 0.09
 
-## namespace
-```bash
-unshare --pid --fork --mount-proc /bin/bash
-```
-
-```bash
-ps -ef --forest
-```
-
-```bash
-ps -aux
-pwd
-exit
-```
-
-## chroot
-```bash
-mkdir container
-cd container
-chroot .
-ldd /bin/bash
-```
-
-```bash
-apt update
-apt install debootstrap -y
-debootstrap jammy .
-ls
-ldd bin/bash
-chroot .
-ls /home
-echo "teste" > teste.txt
-exit
-ls /root
-ls root
-```
-```bash
-chroot .
-ps -aux
-mount -t proc proc /proc
-ps -aux
-exit
-```
-
-## unshare e chroot
-```bash
-unshare --pid --fork --mount-proc chroot . /bin/bash
-mount -t proc proc /proc
-ps -aux
-while true; do echo aula; done;
-```
-
-```bash
-htop
-```
-
-## cgroup
-```bash
-ls /sys/fs/cgroup
-echo "+cpu" >> /sys/fs/cgroup/cgroup.subtree_control
-echo "+cpuset" >> /sys/fs/cgroup/cgroup.subtree_control
-cd /sys/fs/cgroup
-mkdir auladocker
-cd aula docker
-echo "+cpu" >> /sys/fs/cgroup/auladocker/cgroup.subtree_control
-echo "+cpuset" >> /sys/fs/cgroup/auladocker/cgroup.subtree_control
-# pegar pid do processo a ser gerenciado
-echo "27528" >> /sys/fs/cgroup/auladocker/cgroup.procs
-echo "0" >> /sys/fs/cgroup/auladocker/cpuset.cpus
-echo "1" >> /sys/fs/cgroup/auladocker/cpuset.cpus
-echo "500000 1000000" >> echo "0" >> /sys/fs/cgroup/auladocker/cpu.max
-```
-## LXC
-```bash
-apt update && apt install lxc lxc-templates -y
-lxc-create -t ubuntu -n meucontainer
-lxc-ls --fancy
-lxc-start -n meucontainer
-ps -ef --forest
-lxc-attach -n meucontainer
-ps -aux
-```
-## LXD
-```bash
-apt update && apt install lxd lxd-client -y
-lxd init
-lxc launch ubuntu:22.04 meucontainer
-lxc list
-lxc exec meucontainer -- bin/bash
-ps -aux
-lxc stop meucontainer
-lxc delete meucontainer
-```
-
-## Docker Engine Install
-https://docs.docker.com/engine/install/ubuntu/
-```bash
-# Add Docker's official GPG key:
-sudo apt-get update
-sudo apt-get install ca-certificates curl
-sudo install -m 0755 -d /etc/apt/keyrings
-sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc
-sudo chmod a+r /etc/apt/keyrings/docker.asc
-
-# Add the repository to Apt sources:
-echo \
-  "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu \
-  $(. /etc/os-release && echo "$VERSION_CODENAME") stable" | \
-  sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
-sudo apt-get update
-
-sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
-
-sudo groupadd docker
-
-sudo usermod -aG docker $USER
-```
-
-## Primeiros passos
+### Primeiros passos com docker
 ```docker
 # executa container docker
 docker container run hello-world
@@ -171,7 +53,7 @@ docker exec -it 4777a76cfd3a /bin/bash
 # testando funcionamento do nginx dentro do próprio container
 curl localhost
 ```
-## Publicação de portas
+### Publicação de portas
 ```docker
 # executa o container com a imagem do nginx 
 # usando a porta 8080 do host e a porta 80 do container
@@ -199,7 +81,7 @@ lista os containers
 docker container ls -a
 ```
 
-## Variáveis de ambiente
+### Variáveis de ambiente
 ```docker
 # execução de container mysql
 # desta forma dará erro porque falta os dados de configuração do mysql
@@ -217,7 +99,7 @@ docker container run -d -p 3306:3306 -e MYSQL_ROOT_PASSWORD="root1234" -e MYSQL_
 # remove todos os containers de uma vez de forma forçada
 docker container rm -f $(docker container ls -qa)
 ```
-## Executando aplicação nodejs em servidor comum
+### Executando aplicação nodejs em servidor comum
 ```docker
 sudo apt update
 sudo apt upgrade -y
@@ -261,7 +143,7 @@ cd /app
 npm install
 node server.js
 ```
-## OverlayFS
+### OverlayFS
 ```docker
 cd /
 sudo mkdir -p /overlay/primeira_camada
@@ -278,12 +160,12 @@ tree overlay/
 echo "Arquivo merge" | sudo tee /overlay/merge/merge.txt
 tree overlay/
 ```
-## Copy-on-Write
+### Copy-on-Write
 ```docker
 echo "Alteração no arquivo" | sudo tee /overlay/merge/01_camada.txt
 tree overlay/
 ```
-## Docker Commit
+### Docker Commit
 ### Executando a aplicação dentro de um container
 ```docker
 # executa container com imagem ubuntu
@@ -334,7 +216,6 @@ docker image history conversao-temperatura
 docker image inspect conversao-temperatura
 docker image inspect conversao-temperatura > imagem.json
 ```
-
 ### Criando container e instalando curl
 ```docker
 docker container run -it ubuntu /bin/bash
@@ -342,13 +223,9 @@ apt update
 apt install curl -y
 exit
 ```
-
-### Criando Dockerfile01
-```docker
-FROM ubuntu
-RUN apt update
-RUN apt install curl -y
-```
+## Todos os arquivos Dockerfile desta parte estão dentro da pasta curl
+### Dockerfile01
+[Dockerfile01](curl/Dockerfile01)
 
 ### Criando imagem a partir do Dockerfile e executando o container com a nova imagem
 ```docker
@@ -369,12 +246,9 @@ docker build -t ubuntu-curl -f Dockerfile01 . --no-cache
 
 ### Adicionando vim ao Dockerfile
 ### Dockerfile02-vim
-```docker
-FROM ubuntu
-RUN apt update
-RUN apt install curl -y
-RUN apt install vim -y
-```
+
+[Dockerfile02-vim](curl/Dockerfile02-vim)
+
 ```docker
 docker build -t ubuntu-curl -f Dockerfile02-vim .
 docker container run -it ubuntu-curl /bin/bash
@@ -385,11 +259,9 @@ docker image prune
 ```
 ### WORKDIR
 ### Dockerfile03-workdir
-```docker
-FROM ubuntu
-RUN apt update && apt install curl -y
-WORKDIR /app
-```
+
+[Dockerfile03-workdir](curl/Dockerfile03-workdir)
+
 ```docker
 docker build -t ubuntu-curl -f Dockerfile03-workdir .
 docker container run -it ubuntu-curl /bin/bash
@@ -404,12 +276,7 @@ docker image prune
 echo "Arquivo" > arquivo.txt
 ```
 ### Dockerfile04-copy
-```docker
-FROM ubuntu
-RUN apt update && apt install curl -y
-WORKDIR /app
-COPY arquivo.txt .
-```
+[Dockerfile04-copy](curl/Dockerfile04-copy)
 
 ```docker
 docker build -t ubuntu-curl -f Dockerfile04-copy .
@@ -422,12 +289,7 @@ docker image prune
 
 ### ADD
 ### Dockerfile05-add
-```docker
-FROM ubuntu
-RUN apt update && apt install curl -y
-WORKDIR /app
-ADD https://www.google.com pagina.html
-```
+[Dockerfile05-add](curl/Dockerfile05-add)
 
 ```docker
 docker build -t ubuntu-curl -f Dockerfile05-add .
@@ -445,12 +307,8 @@ tar -zvcf teste.tar.gz teste/
 rm -rf teste/
 ```
 ### Dockerfile06-add
-```docker
-FROM ubuntu
-RUN apt update && apt install curl -y
-WORKDIR /app
-ADD teste.tar.gz ./
-```
+[Dockerfile06-add](curl/Dockerfile06-add)
+
 
 ```docker
 docker build -t ubuntu-curl -f Dockerfile06-add .
@@ -463,12 +321,8 @@ docker image prune
 
 ### LABEL
 ### Dockerfile07-label
-```docker
-FROM ubuntu
-RUN apt update && apt install curl -y
-LABEL contato="fagner.fgb@gmail.com"
-WORKDIR /app
-```
+[Dockerfile07-label](curl/Dockerfile07-label)
+
 ```docker
 docker build -t ubuntu-curl -f Dockerfile07-label .
 docker image inspect ubuntu-curl
@@ -481,13 +335,8 @@ docker image prune
 
 ### ENV
 ### Dockerfile08-env
-```docker
-FROM ubuntu
-RUN apt update && apt install curl -y
-LABEL contato="fagner.fgb@gmail.com"
-WORKDIR /app
-ENV VALOR_DOCKER_ENV="Valor XPTO"
-```
+[Dockerfile08-env](curl/Dockerfile08-env)
+
 ```docker
 docker build -t ubuntu-curl -f Dockerfile08-env .
 docker container run -it ubuntu-curl /bin/bash
@@ -497,121 +346,101 @@ docker image rm -f $(docker image ls -qa)
 docker image prune
 ```
 ### VOLUME
+### Dockerfile09-vol
+[Dockerfile09-vol](curl/Dockerfile09-vol)
+
 ```docker
-FROM ubuntu
-RUN apt update && apt install curl -y
-LABEL contato="fagner.fgb@gmail.com"
-VOLUME /app
-```
-```docker
-docker build -t ubuntu-curl -f Dockerfile .
+docker build -t ubuntu-curl -f Dockerfile09-vol .
 docker image inspect ubuntu-curl | grep -A 2 Volumes
 ```
 ### ARG
+### Dockerfile10-arg
+[Dockerfile10-arg](curl/Dockerfile10-arg)
+
 ```docker
-FROM ubuntu
-RUN apt update && apt install curl -y
-WORKDIR /app
-ARG VAR_TEXTO="Texto XPTO"
-RUN echo $VAR_TEXTO > arquivo.txt
-```
-```docker
-docker build -t ubuntu-curl --build-arg VAR_TEXTO="Fagner Geraldes Braga" -f Dockerfile .
+docker build -t ubuntu-curl --build-arg VAR_TEXTO="Fagner Geraldes Braga" -f Dockerfile10-arg .
 docker container run -it ubuntu-curl /bin/bash
 exit
 docker container rm -f $(docker container ls -qa)
+docker image rm -f $(docker image ls -qa)
+docker image prune
 ```
 ### EXPOSE
+### Dockerfile11-exp
+[Dockerfile11-exp](curl/Dockerfile11-exp)
+
 ```docker
-FROM ubuntu
-EXPOSE 80
-RUN apt update && apt install nginx -y
-WORKDIR /app
-```
-```docker
-docker build -t ubuntu-nginx -f Dockerfile .
+docker build -t ubuntu-nginx -f Dockerfile11-exp .
 # -P pega uma porta disponível de forma aleatória
 docker container run -it -P ubuntu-nginx /bin/bash
 /usr/sbin/nginx -g "daemon off;"
 exit
 docker container rm -f $(docker container ls -qa)
+docker image rm -f $(docker image ls -qa)
+docker image prune
 ```
 ### USER
+### Dockerfile12-usr
+[Dockerfile12-usr](curl/Dockerfile12-usr)
+
 ```docker
-FROM ubuntu
-RUN useradd fagner
-RUN apt update && apt install curl -y
-WORKDIR /app
-COPY --chown=fagner:fagner --chmod=777 ./aula/teste.txt .
-USER fagner
-```
-```docker
-docker build -t ubuntu-curl -f Dockerfile .
+docker build -t ubuntu-curl -f Dockerfile12-usr .
 docker container run -it ubuntu-curl /bin/bash
 exit
 docker container rm -f $(docker container ls -qa)
+docker image rm -f $(docker image ls -qa)
+docker image prune
 ```
 ### ENTRYPOINT
-```docker
-FROM ubuntu
-RUN apt update && apt install curl -y
-ENTRYPOINT [ "echo", "Hello World !" ]
-```
-```docker
-docker build -t ubuntu-curl -f Dockerfile .
-docker container run ubuntu-curl 
-docker container rm -f $(docker container ls -qa)
-```
+### Dockerfile13-epoint
+[Dockerfile13-epoint](curl/Dockerfile13-epoint)
 
 ```docker
-FROM ubuntu
-RUN apt update && apt install curl -y
-ENTRYPOINT [ "echo", "Hello World !" ]
-CMD [ "Combinado com o entrypoint" ]
+docker build -t ubuntu-curl -f Dockerfile13-epoint .
+docker container run ubuntu-curl 
+docker container rm -f $(docker container ls -qa)
+docker image rm -f $(docker image ls -qa)
+docker image prune
 ```
+
+### ENTRYPOINT COMBINADO COM CMD
+### Dockerfile14-epointcmd
+[Dockerfile14-epointcmd](curl/Dockerfile14-epointcmd)
+
 ```docker
-docker build -t ubuntu-curl -f Dockerfile .
+docker build -t ubuntu-curl -f Dockerfile14-epointcmd .
 docker container run ubuntu-curl 
 docker container run ubuntu-curl teste
 docker container rm -f $(docker container ls -qa)
+docker image rm -f $(docker image ls -qa)
+docker image prune
 ```
 ### entrypoint.sh
-```bash
-if [ -z $1 ]
-then
-    echo "Iniciando o container sem parametro"
-else
-    echo "Iniciando o container com o parametro $1"
-fi
-```
+[entrypoint.sh](curl/entrypoint.sh)
+
+### SCRIPT ENTRYPOINT
+### Dockerfile15-sc-epoint
+[Dockerfile15-sc-epoint](curl/Dockerfile15-sc-epoint)
+
 ```docker
-FROM ubuntu
-RUN apt update && apt install curl -y
-WORKDIR /app
-COPY --chown=root:root --chmod=100 ./entrypoint.sh .
-ENTRYPOINT [ "./entrypoint.sh" ]
-```
-```docker
-docker build -t ubuntu-curl -f Dockerfile .
+docker build -t ubuntu-curl -f Dockerfile15-sc-epoint .
 docker container run ubuntu-curl 
 docker container run ubuntu-curl teste
 docker container rm -f $(docker container ls -qa)
+docker image rm -f $(docker image ls -qa)
+docker image prune
 ```
+### SCRIPT ENTRYPOINT
+### Dockerfile16-mix
+[Dockerfile16-mix](curl/Dockerfile16-mix)
 
 ```docker
-FROM ubuntu
-RUN apt update && apt install curl -y
-WORKDIR /app
-COPY --chown=root:root --chmod=100 ./entrypoint.sh .
-ENTRYPOINT [ "./entrypoint.sh" ]
-CMD [ "XPTO" ]
-```
-
-```docker
-docker build -t ubuntu-curl -f Dockerfile .
+docker build -t ubuntu-curl -f Dockerfile16-mix .
 docker container run ubuntu-curl 
 docker container run ubuntu-curl teste
 docker container rm -f $(docker container ls -qa)
+docker image rm -f $(docker image ls -qa)
+docker image prune
 ```
 
 ### PRINCIPAIS COMANDOS COM IMAGENS
@@ -624,21 +453,11 @@ docker container rm -f $(docker container ls -qa)
 docker image rm -f $(docker image ls -qa)
 docker image prune
 ```
-
+## Todos os arquivos Dockerfile desta parte estão dentro da pasta temperatura/src/
 ### IMAGEM DA APLICAÇÃO COM DOCKERFILE
 ### Dockerfile01
-```docker
-FROM ubuntu
-RUN apt update && \
-    apt-get install -y curl && \
-    curl -fsSL https://deb.nodesource.com/setup_23.x -o nodesource_setup.sh && \
-    bash nodesource_setup.sh && \
-    apt-get install -y nodejs
-WORKDIR /app
-COPY . .
-RUN npm install
-ENTRYPOINT [ "node", "server.js" ]
-```
+[Dockerfile01](temperatura/src/Dockerfile01)
+
 ```docker
 cd ~/devops/temperatura/src/
 docker build -t conversao-temperatura -f Dockerfile01 .
@@ -686,14 +505,8 @@ Dockerignore
 
 ### Alteração do Dockerfile
 ### Dockerfile-alpine01
-```docker
-FROM node:23.5.0-alpine3.20
-WORKDIR /app
-COPY package*.json .
-RUN npm install
-COPY . .
-ENTRYPOINT [ "node", "server.js" ]
-```
+[Dockerfile-alpine01](temperatura/src/Dockerfile-alpine01)
+
 ```docker
 docker build -t fagnerfgb/conversao-temperatura:v2 -f Dockerfile-alpine01 .
 docker tag fagnerfgb/conversao-temperatura:v2 fagnerfgb/conversao-temperatura:latest
@@ -704,18 +517,15 @@ docker image prune
 ```
 ## Multistage build
 ### Criando imagem simples do GoLang com a nossa aplicação
+## Todos os arquivos Dockerfile desta parte estão dentro da pasta golang
 
 ### Dockerfile.simples
+[Dockerfile.simples](golang/Dockerfile.simples)
+
 ```docker
-FROM golang:1.23.4-alpine3.21
-WORKDIR /app
-COPY . .
-RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o main .
-CMD [ "./main" ]
-```
-```docker
+cd ~/devops
 git pull
-cd devops/app
+cd ~/devops/golang
 docker build -t fagnerfgb/app-multi-staging:simples -f Dockerfile.simples .
 docker run -d -p 8080:8080 fagnerfgb/app-multi-staging:simples 
 docker container rm -f $(docker container ls -qa)
@@ -723,17 +533,7 @@ docker image rm -f $(docker image ls -qa)
 docker image prune
 ```
 ### Dockerfile.multistage
-```docker
-FROM golang:1.23.4-alpine3.21 as build
-WORKDIR /build
-COPY . .
-RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o main .
-
-FROM alpine:3.21.0 as app
-WORKDIR /app
-COPY --from=build /build/main .
-CMD [ "./main" ]
-```
+[Dockerfile.multistage](golang/Dockerfile.multistage)
 
 ```docker
 docker build -t fagnerfgb/app-multistaging:multi -f Dockerfile.multistage .

@@ -1,0 +1,4 @@
+FROM ubuntu
+EXPOSE 80
+RUN apt update && apt install nginx -y
+WORKDIR /app

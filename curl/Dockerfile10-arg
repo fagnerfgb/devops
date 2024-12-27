@@ -1,0 +1,5 @@
+FROM ubuntu
+RUN apt update && apt install curl -y
+WORKDIR /app
+ARG VAR_TEXTO="Texto XPTO"
+RUN echo $VAR_TEXTO > arquivo.txt
