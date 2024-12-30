@@ -29,7 +29,11 @@ Coloque aqui embaixo o comando que a equipe deve usar pra criar um banco de dado
 [Desafio1](Dockerfile-desafio1)
 
 ```docker
-docker container run -d -p 5432:5432 -e POSTGRES_PASSWORD="docker_pwd" -e POSTGRES_USER=docker_usr -e POSTGRES_DB=curso_docker postgres
+docker container run -d -p 5432:5432 \ 
+-e POSTGRES_PASSWORD="docker_pwd" \
+-e POSTGRES_USER=docker_usr \
+-e POSTGRES_DB=curso_docker \
+postgres
 ```
 
 ```docker
