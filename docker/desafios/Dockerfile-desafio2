@@ -1,0 +1,36 @@
+#Autor: Fagner Geraldes Braga
+#Data de criação: 30/12/2024
+#Data de atualização: 30/12/2024
+#Versão: 0.01
+
+# Desafio 02 - Banco de Dados MYSQL
+
+# Agora que a equipe tem como criar o banco de dados Postgre, 
+# crie o comando pra criar o banco de dados MySQL usando os requisitos abaixo:
+
+    # O nome do banco de dados deve ser docker_db
+    # O usuário de acesso ao banco deve ser docker_usr
+    # A senha do usuário deve ser docker_pwd
+
+# Lembrando que a execução em container deve ser transparente pra quem está desenvolvendo. 
+# E que aqui você não precisa se preocupar com a perda dos dados do banco e nem nada disso, 
+# é apenas para desenvolvimento pontual.
+
+#FROM (Create a new build stage from a base image)
+FROM mysql
+
+#EXPOSE (Describe which ports your application is listening on)
+EXPOSE 3306
+
+#LABEL (Add metadata to an image)
+LABEL author="Fagner Geraldes Braga"
+LABEL contact="fagner.fgb@gmail.com"
+LABEL description="MYSQL Database"
+LABEL source="https://github.com/fagnerfgb/devops"
+LABEL documentation="https://github.com/fagnerfgb/devops/blob/master/docker/desafios/desafio2.md"
+
+#ENV (Set environment variables)
+ENV MYSQL_ROOT_PASSWORD="123@Mudar"
+ENV MYSQL_DATABASE=docker_db
+ENV MYSQL_USER=docker_usr
+ENV MYSQL_PASSWORD=docker_pwd

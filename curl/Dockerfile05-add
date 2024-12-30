@@ -1,4 +1,25 @@
+#Autor: Fagner Geraldes Braga
+#Data de criação: 30/12/2024
+#Data de atualização: 30/12/2024
+#Versão: 0.01
+
+#FROM (Create a new build stage from a base image)
 FROM ubuntu
+
+#LABEL (Add metadata to an image)
+LABEL author="Fagner Geraldes Braga"
+LABEL description="Curl installation"
+LABEL source="https://github.com/fagnerfgb/devops"
+LABEL documentation="https://github.com/fagnerfgb/devops/blob/master/04-docker.md"
+
+#RUN (Execute build commands)
 RUN apt update && apt install curl -y
+
+#WORKDIR (Change working directory)
 WORKDIR /app
+
+#ADD (Copy files/directories into a Docker image. It can copy data in three ways:
+#1- Copy files from the local storage to a destination in the Docker image.
+#2- Copy a tarball from the local storage and extract it automatically inside a destination in the Docker image.
+#3- Copy files from a URL to a destination inside the Docker image.
 ADD https://www.google.com pagina.html

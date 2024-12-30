@@ -48,7 +48,7 @@ docker container run nginx
 docker container run -d nginx
 
 # coloca container específico em modo interativo
-docker exec -it 4777a76cfd3a /bin/bash
+docker container exec -it 4777a76cfd3a /bin/bash
 
 # testando funcionamento do nginx dentro do próprio container
 curl localhost
