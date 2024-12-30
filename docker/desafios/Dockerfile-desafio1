@@ -21,7 +21,7 @@
 # é apenas para desenvolvimento pontual.
 
 #FROM (Create a new build stage from a base image)
-FROM postgres
+FROM postgres:17.2-alpine3.21
 
 #EXPOSE (Describe which ports your application is listening on)
 EXPOSE 5432

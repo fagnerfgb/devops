@@ -21,9 +21,12 @@ Lembrando que a execução em container deve ser transparente pra quem está des
 
 Coloque aqui embaixo o comando que a equipe deve usar pra criar um banco de dados MySQL com esses requisitos:
 
-[Desafio2](Dockerfile-desafio2)
-
 ```docker
 docker container run -d -p 3306:3306 -e MYSQL_ROOT_PASSWORD="123@Mudar" -e MYSQL_DATABASE=docker_db -e MYSQL_USER=docker_usr -e MYSQL_PASSWORD=docker_pwd mysql
 ```
 
+```docker
+docker container rm -f $(docker container ls -qa)
+docker image rm -f $(docker image ls -qa)
+docker image prune
+```docker
