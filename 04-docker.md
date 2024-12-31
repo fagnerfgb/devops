@@ -1,7 +1,7 @@
 #Autor: Fagner Geraldes Braga  
 #Data de criação: 13/12/2024  
-#Data de atualização: 27/12/2024  
-#Versão: 0.09
+#Data de atualização: 31/12/2024  
+#Versão: 0.10
 
 ### Primeiros passos com docker
 ```docker
@@ -596,4 +596,96 @@ exit
 docker container rm -f $(docker container ls -qa)
 docker image rm -f $(docker image ls -qa)
 docker image prune
+```
+
+## Volumes
+### Bind Mount
+Mapeia um diretório sistema de arquivo do host com um diretório do container
+
+```docker
+mkdir aula_volume
+docker container run -it --mount type=bind,source="$(pwd)/aula_volume",target=/app ubuntu /bin/bash
+echo "Teste" > /app/teste.txt
+docker container rm -f $(docker container ls -qa)
+docker image rm -f $(docker image ls -qa)
+docker image prune
+```
+
+[Dockerfile-bind](aula_volume/Dockerfile-bind)
+```docker
+docker build -t fagnerfgb/volume-bind:v1 -f aula_volume/Dockerfile-bind .
+docker container run -it --mount type=bind,source="$(pwd)/aula_volume",target=/app fagnerfgb/volume-bind:v1 /bin/bash
+docker container rm -f $(docker container ls -qa)
+docker image rm -f $(docker image ls -qa)
+docker image prune
+```
+
+### Bind de diretório
+```docker
+docker container run -d -p 8080:80 -v $(pwd)/aula_volume/html:/usr/share/nginx/html nginx
+docker container rm -f $(docker container ls -qa)
+docker image rm -f $(docker image ls -qa)
+docker image prune
+```
+
+### Bind de arquivo
+```docker
+docker container run -d -p 8080:80 -v $(pwd)/aula_volume/html/index.html:/usr/share/nginx/html/index.html nginx
+docker container rm -f $(docker container ls -qa)
+docker image rm -f $(docker image ls -qa)
+docker image prune
+```
+
+### Docker Volume
+Gerenciado pelo docker
+
+#### Comandos básicos
+```docker
+docker volume create aula_volume
+docker volume ls
+docker volume inspect aula_volume
+docker volume rm aula_volume
+```
+```docker
+docker volume create aula_volume
+docker container run -it --mount type=volume,source=aula_volume,target=/app ubuntu /bin/bash
+docker container rm -f $(docker container ls -qa)
+docker image rm -f $(docker image ls -qa)
+docker image prune
+```
+
+```docker
+docker volume ls
+docker volume inspect aula_volume
+docker volume prune
+```
+
+[Dockerfile-volume](aula_volume/Dockerfile-volume)
+
+
+```docker
+docker build -t fagnerfgb/volume:v1 -f aula_volume/Dockerfile-volume .
+
+# como no dockerfile foi dada a instrução para criar um 
+# volume e no comando abaxio não foi referenciado, o docker
+# cria um volume com um id aleatório
+docker container run -it fagnerfgb/volume:v1 /bin/bash
+exit
+docker volume ls
+
+docker container run -it -v aula_volume:/app fagnerfgb/volume:v1 /bin/bash
+
+docker container rm -f $(docker container ls -qa)
+docker image rm -f $(docker image ls -qa)
+docker image prune
+docker volume prune
+```
+```docker
+
+
+```
+
+```docker
+
+
 ```
