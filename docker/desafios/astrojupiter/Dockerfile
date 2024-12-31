@@ -16,6 +16,5 @@ LABEL description="Linux Alpine with Web server NGINX"
 LABEL source="https://github.com/fagnerfgb/devops"
 LABEL documentation="https://github.com/fagnerfgb/devops/blob/master/docker/desafios/desafio-astrojupiter.md"
 
-
 #COPY: (Copy files and directories)
 COPY . /usr/share/nginx/html/astrojupiter

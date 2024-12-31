@@ -1,10 +1,36 @@
+#Autor: Fagner Geraldes Braga
+#Data de criação: 30/12/2024
+#Data de atualização: 30/12/2024
+#Versão: 0.01
+
+#FROM (Create a new build stage from a base image)
 FROM ubuntu
+
+#EXPOSE (Describe which ports your application is listening on)
+EXPOSE 8080
+
+#LABEL (Add metadata to an image)
+LABEL author="Fagner Geraldes Braga"
+LABEL contact="fagner.fgb@gmail.com"
+LABEL description="App Conversão de Temeperatura em NodeJS"
+LABEL source="https://github.com/fagnerfgb/devops"
+LABEL documentation="https://github.com/fagnerfgb/devops/blob/master/04-docker.md"
+
+#RUN (Execute build commands)
 RUN apt update && \
     apt-get install -y curl && \
     curl -fsSL https://deb.nodesource.com/setup_23.x -o nodesource_setup.sh && \
     bash nodesource_setup.sh && \
     apt-get install -y nodejs
+
+#WORKDIR (Change working directory)
 WORKDIR /app
+
+#COPY: (Copy files and directories)
 COPY . .
+
+#RUN (Execute build commands)
 RUN npm install
+
+#ENTRYPOINT (Specify default executable.)
 ENTRYPOINT [ "node", "server.js" ]
