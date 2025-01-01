@@ -667,7 +667,7 @@ docker volume prune
 docker build -t fagnerfgb/volume:v1 -f aula_volume/Dockerfile-volume .
 
 # como no dockerfile foi dada a instrução para criar um 
-# volume e no comando abaxio não foi referenciado, o docker
+# volume e no comando abaixo não foi referenciado, o docker
 # cria um volume com um id aleatório
 docker container run -it fagnerfgb/volume:v1 /bin/bash
 exit
@@ -680,12 +680,19 @@ docker image rm -f $(docker image ls -qa)
 docker image prune
 docker volume prune
 ```
+
+### Backup de um docker volume
 ```docker
-
-
+docker build -t fagnerfgb/volume:v1 -f aula_volume/Dockerfile-volume .
+docker container run -it fagnerfgb/volume:v1 /bin/bash
 ```
 
 ```docker
+echo "Teste" > teste.txt
+echo "Exemplo" > exemplo.txt
+exit
+```
 
+```docker
 
 ```

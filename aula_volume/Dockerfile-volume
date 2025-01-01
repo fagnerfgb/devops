@@ -13,5 +13,8 @@ LABEL description="Docker Volume"
 LABEL source="https://github.com/fagnerfgb/devops"
 LABEL documentation="https://github.com/fagnerfgb/devops/blob/master/04-docker.md"
 
+#WORKDIR (Change working directory)
+WORKDIR /app
+
 #VOLUME (Create volume mounts)
 VOLUME /app
