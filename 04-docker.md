@@ -683,6 +683,9 @@ docker volume prune
 
 ### Backup de um docker volume
 ```docker
+# como no dockerfile foi dada a instrução para criar um 
+# volume e no comando abaixo não foi referenciado, o docker
+# cria um volume com um id aleatório
 docker build -t fagnerfgb/volume:v1 -f aula_volume/Dockerfile-volume .
 docker container run -it fagnerfgb/volume:v1 /bin/bash
 ```
@@ -694,5 +697,45 @@ exit
 ```
 
 ```docker
+docker container ls -a
 
+# --volumes-from id --> pega todos os volumes do container do passo anterior 
+# e coloca dentro do novo container criado
+docker container run --volumes-from 823a0c12800b --rm -v $(pwd):/backup fagnerfgb/volume:v1 tar cvf /backup/bkp_vol.tar /app
+# cria volume com o nome "novo_volume"
+docker volume create novo_volume
+
+# restaura o backup no novo container, colocando os dados no volume "novo_volume"
+docker container run -v $(pwd):/backup -v novo_volume:/app fagnerfgb/volume:v1 tar xvf /backup/bkp_vol.tar
+
+docker container rm -f $(docker container ls -qa)
+docker image rm -f $(docker image ls -qa)
+docker image prune
+docker volume prune
 ```
+
+### Exemplo com um docker volume (Bind)
+```docker
+mkdir db_vol
+docker container run -d -p 5432:5432 -e POSTGRES_PASSWORD="docker_pwd" --mount type=bind,source="$(pwd)/db_vol",target=/var/lib/postgresql/data postgres
+docker container rm -f $(docker container ls -qa)
+```
+
+### Exemplo com um docker volume (Volume)
+```docker
+docker container run -d -p 5432:5432 -e POSTGRES_PASSWORD="docker_pwd" --mount type=volume,source=container_postgre_vol,target=/var/lib/postgresql/data postgres
+docker container rm -f $(docker container ls -qa)
+```
+
+
+```docker
+docker image rm -f $(docker image ls -qa)
+docker image prune
+docker volume prune
+```
+
+### Exemplo com tmpfs
+```docker
+docker container run -it --mount type=tmpfs,target=/app ubuntu:22.04 /bin/bash
+```
+
