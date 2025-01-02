@@ -739,9 +739,9 @@ docker volume prune
 docker container run -it --mount type=tmpfs,target=/app ubuntu:22.04 /bin/bash
 ```
 
-### PostGres
+### Postgres
 ```docker
-docker container run -d -p 5432:5432 -e POSTGRES_PASSWORD="docker_pwd" --mount type=volume,source=container_postgre_vol,target=/var/lib/postgresql/data postgres
+docker container run -d -p 5432:5432 -e POSTGRES_PASSWORD="pwdkubenews" -e POSTGRES_USER=kubenews -e POSTGRES_DB=kubenews -v kubenews_vol:/var/lib/postgresql/data postgres:14:10
 docker container rm -f $(docker container ls -qa)
 ```
 
