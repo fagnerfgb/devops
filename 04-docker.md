@@ -741,7 +741,7 @@ docker container run -it --mount type=tmpfs,target=/app ubuntu:22.04 /bin/bash
 
 ### Postgres
 ```docker
-docker container run -d -p 5432:5432 -e POSTGRES_PASSWORD="pwdkubenews" -e POSTGRES_USER=kubenews -e POSTGRES_DB=kubenews -v kubenews_vol:/var/lib/postgresql/data postgres:14:10
+docker container run -d -p 5432:5432 -e POSTGRES_PASSWORD="pwdkubenews" -e POSTGRES_USER=kubenews -e POSTGRES_DB=kubenews -v kubenews_vol:/var/lib/postgresql/data postgres:14.10
 docker container rm -f $(docker container ls -qa)
 ```
 
@@ -755,4 +755,10 @@ cd ~/devops/kube-news/src/
 npm install
 npm audit fix
 node server.js
+```
+```docker
+docker container rm -f $(docker container ls -qa)
+docker image rm -f $(docker image ls -qa)
+docker image prune
+docker volume prune
 ```
