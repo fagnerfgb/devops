@@ -739,3 +739,20 @@ docker volume prune
 docker container run -it --mount type=tmpfs,target=/app ubuntu:22.04 /bin/bash
 ```
 
+### PostGres
+```docker
+docker container run -d -p 5432:5432 -e POSTGRES_PASSWORD="docker_pwd" --mount type=volume,source=container_postgre_vol,target=/var/lib/postgresql/data postgres
+docker container rm -f $(docker container ls -qa)
+```
+
+
+### Executando aplicação nodejs em servidor comum
+```docker
+sudo apt update
+sudo apt install nodejs -y && sudo apt install npm -y
+node -v
+cd ~/devops/kube-news/src/
+npm install
+npm audit fix
+node server.js
+```
