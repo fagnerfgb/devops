@@ -11,7 +11,7 @@ LABEL author="Fagner Geraldes Braga"
 LABEL contact="fagner.fgb@gmail.com"
 LABEL description="Curl installation"
 LABEL source="https://github.com/fagnerfgb/devops"
-LABEL documentation="https://github.com/fagnerfgb/devops/blob/master/04-docker.md"
+LABEL documentation="https://github.com/fagnerfgb/devops/blob/master/04.04-docker-imagem-dockerfile.md"
 
 #RUN (Execute build commands)
 RUN useradd fagner
