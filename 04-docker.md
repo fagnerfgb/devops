@@ -1,7 +1,7 @@
 #Autor: Fagner Geraldes Braga  
 #Data de criação: 13/12/2024  
-#Data de atualização: 02/01/2025  
-#Versão: 0.11
+#Data de atualização: 03/01/2025  
+#Versão: 0.12
 
 ### Primeiros passos com docker
 ```docker
@@ -1382,37 +1382,68 @@ docker container run -d -p 5432:5432 -e POSTGRES_PASSWORD="docker_pwd" --mount t
 docker container rm -f $(docker container ls -qa)
 ```
 ```docker
+# Remove todas as imagens do Docker, forçando a remoção de todas as imagens, incluindo aquelas sem tags.
 docker image rm -f $(docker image ls -qa)
+
+# Remove todas as imagens não utilizadas, ou seja, imagens que não estão associadas a containers em execução.
 docker image prune
+
+# Remove todos os volumes do Docker que não estão sendo utilizados por nenhum container.
 docker volume prune
 ```
 
 ### Exemplo com tmpfs
 ```docker
+# Cria e executa um container baseado na imagem ubuntu:22.04, montando um sistema de arquivos temporário (tmpfs) em /app dentro do container.
+# Isso faz com que o diretório /app seja armazenado na memória volátil do host, não persistindo após o container ser removido.
 docker container run -it --mount type=tmpfs,target=/app ubuntu:22.04 /bin/bash
 ```
 
 ### Postgres
 ```docker
+# Cria e executa um container PostgreSQL, mapeando a porta 5432, definindo variáveis de ambiente para senha, usuário e banco de dados.
+# O volume 'kubenews_vol' é montado para persistência dos dados em /var/lib/postgresql/data.
 docker container run -d -p 5432:5432 -e POSTGRES_PASSWORD="pwdkubenews" -e POSTGRES_USER=kubenews -e POSTGRES_DB=kubenews -v kubenews_vol:/var/lib/postgresql/data postgres:14.10
+
+# Remove todos os containers que estão parados ou em execução, forçando a remoção sem confirmação
 docker container rm -f $(docker container ls -qa)
 ```
 
 
 ### Executando aplicação nodejs em servidor comum
 ```docker
+# Atualiza a lista de pacotes disponíveis para instalação
 sudo apt update
+
+# Instala o Node.js e o npm (gerenciador de pacotes do Node.js)
 sudo apt install nodejs -y && sudo apt install npm -y
+
+# Verifica a versão do Node.js instalada
 node -v
+
+# Navega até o diretório do projeto 'kube-news'
 cd ~/devops/kube-news/src/
+
+# Instala todas as dependências listadas no arquivo 'package.json'
 npm install
+
+# Corrige automaticamente vulnerabilidades e problemas encontrados nas dependências
 npm audit fix
+
+# Inicia o servidor Node.js com o script 'server.js'
 node server.js
 ```
 ```docker
+# Remove todos os contêineres, independentemente de estarem em execução ou não
 docker container rm -f $(docker container ls -qa)
+
+# Remove todas as imagens, mesmo que estejam em uso por contêineres
 docker image rm -f $(docker image ls -qa)
+
+# Limpa imagens que não estão mais sendo usadas por contêineres, liberando espaço
 docker image prune
+
+# Limpa volumes não utilizados, ou seja, volumes não associados a nenhum contêiner
 docker volume prune
 ```
 ### Network
@@ -1555,6 +1586,185 @@ curl http://fgb-nginx-2
 exit
 ```
 ```docker
+# Remove todos os contêineres Docker, incluindo os contêineres em execução ou parados.
+# O comando $(docker container ls -qa) lista todos os IDs dos contêineres (ativos ou não).
+docker container rm -f $(docker container ls -qa)
+
+# Remove todas as imagens Docker locais, forçando a remoção de todas as imagens.
+# O comando $(docker image ls -qa) lista todos os IDs das imagens.
+docker image rm -f $(docker image ls -qa)
+
+# Remove imagens órfãs, ou seja, imagens não utilizadas por nenhum contêiner.
+# Essa ação limpa imagens que não são mais necessárias e não estão associadas a contêineres ativos.
+docker image prune
+```
+
+```docker
+# Remove a rede personalizada 'aula_docker'
+docker network rm aula_docker
+
+# Remove todas as redes não utilizadas
+docker network prune
+
+# Lista todas as redes disponíveis no Docker
+docker network ls
+
+# Exibe as informações de endereço IP do sistema
+ip address
+
+# Inspeciona a rede 'bridge' (rede padrão do Docker)
+docker network inspect bridge
+
+# Cria uma nova rede personalizada chamada 'aula_docker'
+docker network create aula_docker
+
+# Exibe as informações de endereço IP novamente para verificar alterações
+ip a
+
+# Inspeciona a rede recém-criada 'aula_docker'
+docker network inspect aula_docker
+
+# Executa um contêiner Nginx em segundo plano
+docker container run -d nginx
+
+# Exibe as informações de endereço IP novamente
+ip a
+
+# Mostra o status das pontes de rede
+bridge link
+
+# Executa outro contêiner Nginx em segundo plano
+docker container run -d nginx
+
+# Lista todos os contêineres em execução
+docker container ls
+
+# Exibe as informações de endereço IP novamente
+ip a
+
+# Conecta o contêiner especificado à rede 'aula_docker'
+docker network connect aula_docker 754214f895fd
+
+# Exibe as informações de endereço IP novamente
+ip a
+
+# Mostra o status das pontes de rede novamente
+bridge link
+
+# Desconecta o contêiner da rede 'bridge'
+docker network disconnect bridge 754214f895fd
+
+# Mostra o status das pontes de rede após a desconexão
+bridge link
+
+# Exibe as informações de endereço IP novamente
+ip a
+
+# Remove todas as redes não utilizadas
+docker network prune
+
+# Remove todos os contêineres Docker, incluindo os contêineres em execução ou parados.
+# O comando $(docker container ls -qa) lista todos os IDs dos contêineres (ativos ou não).
+docker container rm -f $(docker container ls -qa)
+
+# Remove todas as imagens Docker locais, forçando a remoção de todas as imagens.
+# O comando $(docker image ls -qa) lista todos os IDs das imagens.
+docker image rm -f $(docker image ls -qa)
+
+# Remove imagens órfãs, ou seja, imagens não utilizadas por nenhum contêiner.
+# Essa ação limpa imagens que não são mais necessárias e não estão associadas a contêineres ativos.
+docker image prune
+```
+### Rede Host
+```docker
+# Executa um contêiner Nginx em segundo plano usando a rede 'host'
+docker container run -d --network=host nginx
+
+# Lista todos os contêineres em execução
+docker container ls
+
+# Inspeciona o contêiner com o ID especificado (neste exemplo: 04bcc220199b)
+docker container inspect 04bcc220199b
+
+# Exibe as informações de endereço IP do sistema para verificar como a rede 'host' está configurada
+ip a
+
+# Remove todas as redes não utilizadas
+docker network prune
+
+# Remove todos os contêineres Docker, incluindo os contêineres em execução ou parados.
+# O comando $(docker container ls -qa) lista todos os IDs dos contêineres (ativos ou não).
+docker container rm -f $(docker container ls -qa)
+
+# Remove todas as imagens Docker locais, forçando a remoção de todas as imagens.
+# O comando $(docker image ls -qa) lista todos os IDs das imagens.
+docker image rm -f $(docker image ls -qa)
+
+# Remove imagens órfãs, ou seja, imagens não utilizadas por nenhum contêiner.
+# Essa ação limpa imagens que não são mais necessárias e não estão associadas a contêineres ativos.
+docker image prune
+```
+### Rede None
+```docker
+# Executa um contêiner Ubuntu em modo interativo e com rede desativada
+docker container run -it --network=none ubuntu /bin/bash
+
+```
+```docker
+# Lista todos os contêineres em execução
+docker container ls
+
+# Inspeciona o contêiner específico pelo ID ou nome
+docker container inspect c818caeacf29
+```
+```docker
+exit
+```
+```docker
+# Remove todas as redes não utilizadas
+docker network prune
+
+# Remove todos os contêineres Docker, incluindo os contêineres em execução ou parados.
+# O comando $(docker container ls -qa) lista todos os IDs dos contêineres (ativos ou não).
+docker container rm -f $(docker container ls -qa)
+
+# Remove todas as imagens Docker locais, forçando a remoção de todas as imagens.
+# O comando $(docker image ls -qa) lista todos os IDs das imagens.
+docker image rm -f $(docker image ls -qa)
+
+# Remove imagens órfãs, ou seja, imagens não utilizadas por nenhum contêiner.
+# Essa ação limpa imagens que não são mais necessárias e não estão associadas a contêineres ativos.
+docker image prune
+```
+### Adicionar domínios ao container
+```docker
+# Exibe as informações das interfaces de rede do sistema host
+ip a
+
+# Cria e executa um contêiner chamado "fgb-nginx" com a imagem Nginx, utilizando a rede "host"
+docker container run --name fgb-nginx -d --network=host nginx
+
+# Cria e executa um contêiner chamado "fgb-ubuntu" com a imagem Ubuntu, adicionando uma entrada no arquivo /etc/hosts
+# que associa o nome "fagner.com.br" ao endereço IP 172.31.111.24. Abre um shell interativo no contêiner.
+docker container run --name fgb-ubuntu --add-host=fagner.com.br:172.31.111.24 -it ubuntu /bin/bash
+```
+```docker
+# Atualiza a lista de pacotes disponíveis no contêiner
+apt update 
+
+# Instala o utilitário 'curl' no contêiner
+apt install curl -y
+
+# Usa o 'curl' para fazer uma requisição HTTP ao hostname 'fagner.com.br'
+curl fagner.com.br
+
+# Sai do contêiner e encerra o shell interativo
+exit
+```
+```docker
+# Remove todas as redes não utilizadas
+docker network prune
+
 # Remove todos os contêineres Docker, incluindo os contêineres em execução ou parados.
 # O comando $(docker container ls -qa) lista todos os IDs dos contêineres (ativos ou não).
 docker container rm -f $(docker container ls -qa)
