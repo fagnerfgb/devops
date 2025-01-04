@@ -1,0 +1,10 @@
+services:
+  # Define o serviço Nginx
+  nginx:
+    # Define o nome do container
+    container_name: fgb-nginx
+    # Especifica a imagem do Nginx a ser usada (última versão disponível)
+    image: nginx:latest
+    # Mapeia as portas: porta 8080 do host para a porta 80 do container
+    ports:
+      - "8080:80"

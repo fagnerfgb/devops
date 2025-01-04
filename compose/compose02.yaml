@@ -1,0 +1,13 @@
+services:
+  nginx:
+    # Nome do container
+    container_name: fgb-nginx
+    # Imagem Docker do Nginx (última versão)
+    image: nginx:latest
+    # Porta 8080 do host mapeada para a porta 80 do container
+    ports:
+      - "8080:80"
+    # Sobrescreve o comando padrão do container para executar "echo Hello world"
+    command: 
+      - echo
+      - Hello world

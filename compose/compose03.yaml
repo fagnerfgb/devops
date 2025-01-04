@@ -1,0 +1,20 @@
+services:
+  # Primeiro serviço Nginx
+  nginx:
+    # Nome do container
+    container_name: fgb-nginx
+    # Imagem Docker do Nginx (última versão)
+    image: nginx:latest
+    # Porta 8080 do host mapeada para a porta 80 do container
+    ports:
+      - "8080:80"
+
+  # Segundo serviço Nginx
+  nginx2:
+    # Nome do container
+    container_name: fgb-nginx2
+    # Imagem Docker do Nginx (última versão)
+    image: nginx:latest
+    # Porta 8081 do host mapeada para a porta 80 do container
+    ports:
+      - "8081:80"
