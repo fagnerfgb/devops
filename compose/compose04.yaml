@@ -1,0 +1,22 @@
+services:
+  # Define o serviço para o banco de dados Postgres
+  postgre:
+    # Nome do container que será exibido no Docker
+    container_name: fgb-postgre
+    
+    # Especifica a imagem do Docker que será usada para criar o container
+    image: postgres:12.17
+    
+    # Define o mapeamento de portas entre o host e o container
+    # O host (máquina local) usará a porta 5432, redirecionando para a porta 5432 do container
+    ports:
+      - 5432:5432
+    
+    # Configura as variáveis de ambiente usadas pelo Postgres
+    # POSTGRES_PASSWORD: senha para o usuário do banco de dados
+    # POSTGRES_USER: nome do usuário do banco de dados
+    # POSTGRES_DB: nome do banco de dados a ser criado
+    environment:
+      POSTGRES_PASSWORD: pwdkubenews
+      POSTGRES_USER: kubenews
+      POSTGRES_DB: kubenews

@@ -1,0 +1,41 @@
+services:
+  # Serviço Postgres
+  postgre:
+    # Nome do container
+    container_name: fgb-postgre
+    
+    # Imagem Docker do Postgres
+    image: postgres:12.17
+    
+    # Porta 5432 do host mapeada para a porta 5432 do container
+    ports:
+      - 5432:5432
+    
+    # Variáveis de ambiente para configuração do banco de dados
+    environment:
+      POSTGRES_PASSWORD: pwdkubenews  # Senha do usuário do banco
+      POSTGRES_USER: kubenews         # Nome do usuário
+      POSTGRES_DB: kubenews           # Nome do banco de dados
+    
+    # Volume para persistência de dados
+    volumes:
+      - postgre_docker_vol:/var/lib/postgresql/data
+    
+    # Rede personalizada para o serviço
+    networks:
+      - kube_news_net
+
+# Definição do volume
+volumes:
+  postgre_docker_vol:
+    # Nome do volume gerenciado pelo Docker
+    name: my_postgre_vol
+
+# Definição da rede personalizada
+networks:
+  kube_news_net:
+    # Nome da rede no Docker
+    name: knews_network
+    
+    # Driver de rede utilizado (bridge)
+    driver: bridge
