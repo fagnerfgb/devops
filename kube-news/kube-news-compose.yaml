@@ -1,0 +1,32 @@
+services:
+  # Serviço da aplicação kube-news
+  kube_news:
+    # Imagem Docker da aplicação kube-news, com a versão definida pela variável de ambiente KUBE_NEWS_TAG (ou 'latest' por padrão)
+    image: fagnerfgb/kube-news:${KUBE_NEWS_TAG:-latest}
+    
+    # Configurações para construção da imagem a partir do Dockerfile
+    build:
+      context: ./src            # Diretório onde está localizado o Dockerfile
+      dockerfile: Dockerfile    # Nome do arquivo Dockerfile
+    
+    # Nome do container
+    container_name: fgb-kube-news
+    
+    # Mapeia a porta 8080 do host para a porta 8080 do container
+    ports:
+      - 8080:8080
+    
+    # Rede personalizada para o serviço
+    networks:
+      - kube_news_net
+    
+    # Dependência do serviço Postgres
+    depends_on:
+      - postgre
+    
+    # Variáveis de ambiente para configuração da aplicação
+    environment:
+      DB_DATABASE: ${POSTGRES_DB}         # Nome do banco de dados
+      DB_USERNAME: ${POSTGRES_USER}       # Nome do usuário do banco de dados
+      DB_PASSWORD: ${POSTGRES_PASSWORD}   # Senha do banco de dados
+      DB_HOST: fgb-postgre                # Nome do container do Postgres (para conexão)

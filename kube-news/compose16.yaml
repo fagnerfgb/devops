@@ -1,0 +1,6 @@
+services:
+  # Serviço da aplicação kube-news
+  kube_news:
+    # Porta 8181 do host mapeada para a porta 8181 do container
+    ports:
+      - 8181:8181

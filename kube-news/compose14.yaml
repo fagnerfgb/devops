@@ -1,0 +1,50 @@
+services:
+  # Serviço Postgres
+  postgre:
+    # Nome do container que será criado para o serviço Postgres
+    container_name: fgb-postgre
+    # Imagem Docker usada para o serviço Postgres, com a tag configurada pela variável POSTGRES_TAG
+    image: postgres:${POSTGRES_TAG}
+    # Porta do container (5432) mapeada para a mesma porta no host
+    ports:
+      - 5432:5432
+    # Variáveis de ambiente que configuram o banco de dados
+    environment:
+      # Define a senha do usuário do banco de dados
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      # Define o nome do usuário do banco de dados
+      POSTGRES_USER: ${POSTGRES_USER}
+      # Define o nome do banco de dados
+      POSTGRES_DB: ${POSTGRES_DB}
+    # Volume persistente para armazenar os dados do banco
+    volumes:
+      # Mapeia o volume postgre_docker_vol para o diretório de dados do Postgres no container
+      - postgre_docker_vol:/var/lib/postgresql/data
+    # Rede personalizada para isolar o serviço em um ambiente de rede específico
+    networks:
+      - kube_news_net    
+
+  # Serviço Web que estende configurações existentes
+  web:
+    # Estende as configurações do serviço kube_news a partir de outro arquivo de composição
+    extends:
+      # Caminho do arquivo onde o serviço kube_news está definido
+      file: ./kube-news-compose.yaml
+      # Nome do serviço a ser estendido
+      service: kube_news
+      
+# Definição do volume
+volumes:
+  # Configuração do volume Docker para armazenar dados do Postgres
+  postgre_docker_vol:
+    # Nome atribuído ao volume gerenciado pelo Docker
+    name: my_postgre_vol
+
+# Definição da rede personalizada
+networks:
+  # Configuração de uma rede Docker personalizada
+  kube_news_net:
+    # Nome atribuído à rede
+    name: knews_network
+    # Driver de rede utilizado para isolar os containers (bridge)
+    driver: bridge

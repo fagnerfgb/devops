@@ -1,0 +1,61 @@
+services:
+  # Serviço Postgres
+  postgre:
+    # Nome do container
+    container_name: fgb-postgre
+    # Imagem Docker do Postgres com a versão configurada pela variável de ambiente
+    image: postgres:${POSTGRES_TAG}
+    # Porta 5432 do host mapeada para a porta 5432 do container
+    ports:
+      - 5432:5432
+    # Variáveis de ambiente para configuração do banco de dados
+    environment:
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}  # Senha do usuário do banco
+      POSTGRES_USER: ${POSTGRES_USER}          # Nome do usuário do banco
+      POSTGRES_DB: ${POSTGRES_DB}              # Nome do banco de dados
+    # Volume para persistência de dados
+    volumes:
+      - postgre_docker_vol:/var/lib/postgresql/data
+    # Rede personalizada para o serviço
+    networks:
+      - kube_news_net    
+
+  # Serviço da aplicação kube-news
+  kube_news:
+    # Imagem Docker da aplicação kube-news com tag configurada pela variável de ambiente ou "latest" como padrão
+    image: fagnerfgb/kube-news:${KUBE_NEWS_TAG:-latest}
+    # Configurações para construção da imagem a partir do Dockerfile
+    build:
+      context: ./src            # Diretório onde está localizado o Dockerfile
+      dockerfile: Dockerfile    # Nome do arquivo Dockerfile
+    # Nome do container
+    container_name: fgb-kube-news
+    # Porta 8080 do host mapeada para a porta 8080 do container
+    ports:
+      - 8080:8080
+    # Rede personalizada para o serviço
+    networks:
+      - kube_news_net
+    # Dependência do serviço Postgres
+    depends_on:
+      - postgre
+    # Variáveis de ambiente para configuração da aplicação
+    environment:
+      DB_DATABASE: ${POSTGRES_DB}         # Nome do banco de dados
+      DB_USERNAME: ${POSTGRES_USER}       # Nome do usuário do banco de dados
+      DB_PASSWORD: ${POSTGRES_PASSWORD}   # Senha do banco de dados
+      DB_HOST: fgb-postgre                # Nome do container do Postgres (para conexão)
+
+# Definição do volume
+volumes:
+  postgre_docker_vol:
+    # Nome do volume gerenciado pelo Docker
+    name: my_postgre_vol
+
+# Definição da rede personalizada
+networks:
+  kube_news_net:
+    # Nome da rede no Docker
+    name: knews_network
+    # Driver de rede utilizado (bridge)
+    driver: bridge
