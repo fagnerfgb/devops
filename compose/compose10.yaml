@@ -1,0 +1,18 @@
+services:
+  # Serviço Nginx
+  nginx:
+    # Nome do container
+    container_name: fgb-nginx
+    # Imagem Docker do Nginx
+    image: nginx:latest
+    # Modo da rede
+    network_mode: "host"
+  # Serviço curl
+  curl:
+    # Nome do container
+    container_name: fgb-curl
+    # Imagem Docker do Nginx
+    image: nginx:latest
+    # Adiciona entrada ao arquivo hosts do container
+    extra_hosts:
+      fagner.com.br: "172.31.111.24"
