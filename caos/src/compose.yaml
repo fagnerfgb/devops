@@ -1,0 +1,12 @@
+services:
+  # Serviço 'web' definido no arquivo de composição Docker
+  web:
+    # Especifica a imagem Docker a ser usada para o serviço
+    image: fagnerfgb/caos:v1
+    # Mapeia a porta 8080 do host para a porta 3000 do container
+    ports:
+      - 8080:3000
+    # Configura a política de reinício para o serviço
+    # restart: on-failure      # Reinicia o container somente em caso de falhas (desativado)
+    # restart: unless-stopped  # Reinicia automaticamente o container, exceto se ele foi parado manualmente (desativado)
+    restart: always            # Reinicia o container sempre, independentemente da causa (ativa)
