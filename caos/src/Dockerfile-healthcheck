@@ -1,0 +1,30 @@
+# Define a imagem base como Node.js na versão 20.9.0
+FROM node:20.9.0
+
+# Define o diretório de trabalho dentro do container
+WORKDIR /app
+
+# Copia os arquivos de configuração do npm para o diretório de trabalho
+COPY package*.json ./
+
+# Instala as dependências definidas nos arquivos package.json e package-lock.json
+RUN npm install
+
+# Atualiza o índice de pacotes do sistema operacional e instala a ferramenta 'stress'
+RUN apt update && apt install stress --yes
+
+# Copia todos os arquivos do diretório atual (no host) para o diretório de trabalho do container
+COPY . .
+
+# Executa o comando para compilar o código do projeto (deve estar definido em package.json)
+RUN npm run compile
+
+# Define um healthcheck para verificar se a aplicação está funcionando
+# Intervalo entre checagens: 10s, timeout: 5s, início após 30s, tenta 1 vez antes de marcar como unhealthy
+HEALTHCHECK --interval=10s --timeout=5s --start-period=30s --retries=1 CMD [ "curl","-f","http://localhost:3000/health" ]
+
+# Expõe a porta 3000 do container
+EXPOSE 3000
+
+# Define o comando padrão a ser executado ao iniciar o container
+CMD ["npm", "start"]
