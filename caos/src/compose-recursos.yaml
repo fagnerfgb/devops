@@ -1,0 +1,22 @@
+services:
+  # Serviço 'web' definido no arquivo de composição Docker
+  web:
+    # Especifica a imagem Docker a ser usada para o serviço
+    image: fagnerfgb/caos:v2
+    # Mapeia a porta 8080 do host para a porta 3000 do container
+    ports:
+    - 8080:3000
+    # Configura a política de reinício para o serviço
+    # restart: on-failure      # Reinicia o container somente em caso de falhas (desativado)
+    # restart: unless-stopped  # Reinicia automaticamente o container, exceto se ele foi parado manualmente (desativado)
+    restart: always # Reinicia o container sempre, independentemente da causa (ativa)
+    # Define o conjunto de CPUs que o container pode usar
+    cpuset: "0"
+    # Limita a quantidade de memória e swap disponível para o container
+    memswap_limit: 512M
+    deploy:
+      resources:
+        # Define os limites de recursos do container
+        limits:
+          cpus: "0.5" # Limita o uso de CPU a 0.5 (50% de um núcleo)
+          memory: 512M # Limita o uso de memória a 512MB
