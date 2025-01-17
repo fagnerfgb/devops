@@ -3,16 +3,16 @@
 #Data de atualização: 12/12/2024  
 #Versão: 0.02
 
-```git
+```bash
 git config --list
 ```
-```git
+```bash
 git config --global user.name "Fagner Geraldes Braga"
 git config --global user.email fagner.fgb@gmail.com
 git config --global core.editor "code --wait"
 git config --global init.defaultbranch main
 ```
-```git
+```bash
 git init
 git status
 git add nome-do-arquivo
@@ -22,32 +22,32 @@ git commit
 git commit -m "Comentário"
 git commit -am "Comentário"
 ```
-```git
+```bash
 git log
 git log -p "nome-do-arquivo"
 ```
-```git
+```bash
 git checkout hash
 git checkout main
 ```
-```git
+```bash
 git reset --soft HEAD~1
 git reset --hard
 ```
 
-```git
+```bash
 mkdir bin
 touch bin/teste.exe
 echo "teste" >> dados.log
 ```
 
-```git
+```bash
 vim .gitignore
 bin/
 *.log
 ```
 
-```git
+```bash
 git branch feature/novo_arquivo
 git branch
 git checkout feature/novo_arquivo
@@ -57,17 +57,17 @@ git checkout main
 cat arquivo.txt
 ```
 
-```git
+```bash
 git branch -m feature/fagner
 ```
 
-```git
+```bash
 git checkout main
 git branch -d feature/fagner
 git branch -D feature/fagner
 ```
 
-```git
+```bash
 git checkout -b feature/fagner
 echo "branch feature/fagner" >> fagner.txt
 git add .
@@ -82,7 +82,7 @@ git merge feature/fagner
 git branch -d feature/fagner
 ```
 
-```git
+```bash
 git checkout -b feature/fagner_rebase
 echo "Adicionando o arquivo rebase.txt" >> rebase.txt
 git add . 
@@ -104,7 +104,7 @@ git rebase feature/fagner_rebase
 git branch -d feature/fagner_rebase
 ```
 
-```git
+```bash
 git checkout -b feature/fagner_cherry_pic
 echo "Primeira linha" >> cherrypic.txt
 git add .
@@ -121,7 +121,7 @@ git cherry-pick bad9619ca8056998e8fa3af0670c2b56bd05a5f0
 git checkout main
 ```
 
-```git
+```bash
 git tag
 git tag -a v2.0 -m "Versão 2.0"
 git tag -a v1.0 -m "Versão 1.0" 8311b997cf0c707f526a51191708d1c7be3696cc
@@ -130,21 +130,21 @@ git show v1.0
 git show v2.0
 git tag -d v2.0
 ```
-```git
+```bash
 # Criando chave SSH
 
 ssh-keygen -t rsa -b 2048
 cat id_rsa.pub
 ```
-```git
+```bash
 git remote add origin git@github.com:fagnerfgb/devops.git
 git branch -M master
 git push -u origin master
 ```
-```git
+```bash
 git clone git@github.com:fagnerfgb/devops.git
 ```
-```git
+```bash
 git checkout -b newbranch
 git log
 echo "Repositorio remoto" >> main.txt
@@ -154,17 +154,17 @@ git log
 git push
 git push --set-upstream origin newbranch
 ```
-```git
+```bash
 git checkout master
 cat main.txt
 git pull
 cat arquivo.txt
 ```
-```git
+```bash
 git merge newbranch -m "fazendo merge da branch newbranch para a branch master"
 git push
 ```
-```git
+```bash
 echo "Nova linha no arquivo main" >> main.txt
 git commit -am "Nova linha no main.txt"
 git push
@@ -175,7 +175,7 @@ git push
 cat main.txt
 cat arquivo.txt
 ```
-```git
+```bash
 echo "Resolvendo conflitos - usuario local" >> fagner.txt
 cat fagner.txt
 git commit -am "alteracao local"
@@ -184,7 +184,7 @@ vim fagner.txt
 git commit -am "conflito resolvido"
 git push
 ```
-```git
+```bash
 echo "nova linha local fetch" >> main.txt
 git commit -am "nova alteracao"
 git fetch origin
@@ -200,7 +200,7 @@ git commit -am "Merge com git fetch"
 git push
 cat main.txt
 ```
-```git
+```bash
 git log
 git log arquivo.txt
 git log --oneline
