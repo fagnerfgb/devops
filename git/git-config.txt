@@ -24,3 +24,5 @@ sudo usermod -aG docker $USER
 exit
 sudo reboot
 docker run hello-world
+
+git pull && git add . && git commit -m "Atualizando a documentação" && git push
